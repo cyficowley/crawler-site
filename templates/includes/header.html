@@ -1,0 +1,46 @@
+<nav class="navbar navbar-default navbar-fixed-top">
+
+    <!-- Inside of a Container -->
+    <div class="container-fluid">
+
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <!-- This is the actual code that create the "hamburger icon" -->
+        <!-- The data-target grabs ids to put into the icon -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+
+                <!--  Code for the hamburger icon-->
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <a class="navbar-brand" href="https://www.malwarebytes.com">Malwarebytes</a>
+        </div>
+
+        <!-- Anything inside of collapse navbar-collapse goes into the "hamburger" -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav links">
+                <li><a href="/">View Database</a></li>
+                <li><a href="crawl-settings">Crawl Website</a></li>
+            </ul>
+
+            <!-- SEARCH BAR -->
+            <form class="navbar-form navbar-left" role="search" action="search-results">
+                <div class="form-group">
+                    <input type="text" class="form-control" name="search" placeholder="Search for URL">
+                </div>
+                <button type="submit" class="btn btn-default">Submit</button>
+            </form>
+
+
+            <!-- Stuff on the Right -->
+
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="http://cyruscowley.tk/contact.html">Contact Me</a></li>
+            </ul>
+
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>

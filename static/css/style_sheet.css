@@ -1,0 +1,20 @@
+@import url('https://fonts.googleapis.com/css?family=Fira+Sans:300');
+body {
+    font-family: 'Fira Sans', serif;
+    font-weight: 300;
+    font-size: 1em;
+    margin-top: 60px !important;
+    margin-bottom: 60px !important;
+}
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Work Sans', sans-serif !important;
+}
+h1{
+    font-weight: 500 !important;
+}
+p, div {
+    font-family: 'Fira Sans', serif;
+}
+.unbold{
+    font-weight:normal;
+}

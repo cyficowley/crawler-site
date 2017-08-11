@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/> <!--320-->
+    <meta name="description" content="Crawler for Malwarebytes.com">
+    <meta name="author" content="Cyrus Cowley">
+    <title>Malwarebytes Crawler</title>
+    <link rel="stylesheet" href="/static/css/style_sheet.css">
+    <link rel="icon" href="/static/images/logo.png">
+    <link rel="stylesheet" href="/static/css/bootstrap.css">
+</head>
+<body>
+
+{% include "includes/header.html" %}
+
+<div class="container">
+    <div class="jumbotron">
+        <h1>Database Access</h1>
+    </div>
+    <div class="col-lg-8">
+        <h3 class="text-center">All links with a status of (Placeholder) 404 </h3>
+        <hr/>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Status Code</th>
+                <th>Url (click to see details)</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>1.</td>
+                <td>404</td>
+                <td><a href="link-details?input=https://www.malwarebytes.com/business/endpointprotection/">https://www.malwarebytes.com/business/endpointprotection/</a></td>
+            </tr>
+            <tr>
+                <td>2.</td>
+                <td>404</td>
+                <td><a href="link-details?input=https://www.malwarebytes.com/business/">https://www.malwarebytes.com/business/</a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-lg-4">
+        <h3 class="text-center">Look for new statuses</h3>
+        <hr/>
+        <form onsubmit="return submit_form()">
+            <div class="form-group">
+                <label for="searchbox">Search for Statuses</label>
+                <input class="form-control" id="searchbox" name="statuses" placeholder="ex : 404, 403">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+
+        <hr/>
+        <form action="">
+            <button type="submit" class="btn btn-default btn-danger">Clear Database</button>
+        </form>
+    </div>
+</div>
+<script>
+    function submit_form(){
+        searchbox = $("#searchbox");
+        current_text = searchbox.val();
+        current_text = current_text.split(",");
+        endstring = "";
+        for (i = 0; i < current_text.length; i ++){
+            endstring += current_text[i].trim() + " "
+        }
+        if(endstring.length > 0){
+            endstring = endstring.substring(0, endstring.length -1);
+        }
+        searchbox.val(endstring);
+        return true;
+    }
+
+</script>
+
+{% include "includes/footer.html" %}
+
+<script>
+    $(".links").children().eq(0).addClass("active");
+</script>
+</body>
+</html>

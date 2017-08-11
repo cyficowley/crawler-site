@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Crawler for Malwarebytes.com">
+    <meta name="author" content="Cyrus Cowley">
+    <title>Malwarebytes Crawler</title>
+    <link rel="stylesheet" href="/static/css/style_sheet.css">
+    <link rel="icon" href="/static/images/logo.png">
+    <link rel="stylesheet" href="/static/css/bootstrap.css">
+
+    <style>
+        table tbody tr:first-child td{
+            border-top: none;
+        }
+    </style>
+</head>
+<body>
+
+{% include "includes/header.html" %}
+
+<div class="container">
+
+    <div class="jumbotron">
+        <h1>Crawl Website</h1>
+    </div>
+    <div class="col-lg-4">
+        <h3>Latest Crawl Statistics</h3>
+        <table class="table">
+            <tbody>
+            <tr>
+                <td>Last Crawl</td>
+                <td>6/12/34 at 9:05 PM</td>
+            </tr>
+            <tr>
+                <td>Time to Complete</td>
+                <td>5 minutes 12 seconds</td>
+            </tr>
+            <tr>
+                <td>404s Found</td>
+                <td>12 (Go to <a href="/">View Database</a> to see these problems</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-lg-4">
+        <h3>Crawl Options</h3>
+        <hr/>
+        <form action="update-options" method="post">
+            <div class="form-group">
+                <label for="allowed_urls">Allowed URLs (will be scanned for new links)</label>
+                <input class="form-control" id="allowed_urls" name="allowed_urls" value="www.malwarebytes.com, support.malwarebytes.com, blog.malwarebytes.com">
+            </div>
+            <div class="form-group">
+                <label for="disallowed_urls">Disallowed URLs (won't be accessed in any way)</label>
+                <input class="form-control" id="disallowed_urls" name="disallowed_urls" value="www.facebook.com">
+            </div>
+            <div class="form-group">
+                <label for="start_page">Starting From</label>
+                <input class="form-control" id="start_page" name="start_page" value="https://www.malwarebytes.com/sitemap.xml">
+            </div>
+            <fieldset class="form-group">
+                <label for="trymeout">Recheck Redirects:</label>
+                <div class="form-check" id="trymeout">
+                    <label class="form-check-label unbold">
+                        <input type="radio" class="form-check-input" name="recheck_redirects" value="true" checked>
+                        True
+                    </label>
+                    <span>&nbsp;&nbsp;</span>
+                    <label class="form-check-label unbold">
+                        <input type="radio" class="form-check-input" name="recheck_redirects" value="false">
+                        False
+                    </label>
+                </div>
+            </fieldset>
+            <button type="submit" class="btn btn-default btn-primary">Update Options</button>
+        </form>
+    </div>
+    <div class="col-lg-4">
+        <h3>Scheduled Crawl Config</h3>
+        <hr/>
+        <form action="">
+            <div class="form-group">
+                <label for="time_selection">Select a time</label>
+                <select class="form-control" name="time_selection" id="time_selection">
+                    <option value="0">12:00 AM</option>
+                    <option value="3">3:00 AM</option>
+                    <option value="6">6:00 AM</option>
+                    <option value="9">9:00 AM</option>
+                    <option value="12">12:00 PM</option>
+                    <option value="15">3:00 PM</option>
+                    <option value="18">6:00 PM</option>
+                    <option value="21">9:00 PM</option>
+                </select>
+            </div>
+            <fieldset class="form-group">
+                <label for="weekly_occurance">Recrawl Website</label>
+                <div class="form-check" id="weekly_occurance">
+                    <label class="form-check-label unbold">
+                        <input type="radio" class="form-check-input" name="recheck_redirects" value="daily" checked>
+                        Daily
+                    </label>
+                    <span>&nbsp;&nbsp;</span>
+                    <label class="form-check-label unbold">
+                        <input type="radio" class="form-check-input" name="recheck_redirects" value="thricely">
+                        Every 3 days
+                    </label>
+                    <span>&nbsp;&nbsp;</span>
+                    <label class="form-check-label unbold">
+                        <input type="radio" class="form-check-input" name="recheck_redirects" value="weekly">
+                        Weekly
+                    </label>
+                </div>
+            </fieldset>
+            <button type="submit" class="btn btn-default btn-primary">Update Schedule</button>
+        </form>
+        <hr/>
+        <form action="">
+                <button type="submit" class="btn btn-default btn-warning">Crawl Now</button>
+        </form>
+    </div>
+</div>
+
+{% include "includes/footer.html" %}
+
+<script>
+        $(".links").children().eq(1).addClass("active");
+</script>
+</body>
+</html>

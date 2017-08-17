@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'django_crawler_new',
     'main_app',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -124,3 +125,12 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     static_dir,
 ]
+
+#CELERY
+BROKER_URL = 'redis://localhost:6379'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Africa/Nairobi'
+

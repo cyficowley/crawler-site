@@ -18,7 +18,7 @@
 </head>
 <body>
 
-{% include "includes/header.html" %}
+{% include "includes/header.html" with search=search %}
 
 <div class="container">
 
@@ -47,77 +47,80 @@
     <div class="col-lg-4">
         <h3>Crawl Options</h3>
         <hr/>
-        <form action="update-options" method="post">
+        <form action="/update-options/" method="post">
             <div class="form-group">
                 <label for="allowed_urls">Allowed URLs (will be scanned for new links)</label>
-                <input class="form-control" id="allowed_urls" name="allowed_urls" value="www.malwarebytes.com, support.malwarebytes.com, blog.malwarebytes.com">
+                <input class="form-control" id="allowed_urls" name="allowed_urls" placeholder="www.malwarebytes.com, support.malwarebytes.com" value="{{ allowed_urls|join:", "}}">
             </div>
             <div class="form-group">
                 <label for="disallowed_urls">Disallowed URLs (won't be accessed in any way)</label>
-                <input class="form-control" id="disallowed_urls" name="disallowed_urls" value="www.facebook.com">
+                <input class="form-control" id="disallowed_urls" name="disallowed_urls" value="{{ disallowed_urls|join:", "}}">
             </div>
             <div class="form-group">
                 <label for="start_page">Starting From</label>
-                <input class="form-control" id="start_page" name="start_page" value="https://www.malwarebytes.com/sitemap.xml">
+                <input class="form-control" id="start_page" name="start_page" placeholder="https://www.malwarebytes.com/sitemap.xml" value={{ start_page }}>
             </div>
             <fieldset class="form-group">
                 <label for="trymeout">Recheck Redirects:</label>
                 <div class="form-check" id="trymeout">
                     <label class="form-check-label unbold">
-                        <input type="radio" class="form-check-input" name="recheck_redirects" value="true" checked>
+                        <input type="radio" class="form-check-input" name="recheck_redirects" value="true" {% if recheck_redirects %} checked{% endif %}>
                         True
                     </label>
                     <span>&nbsp;&nbsp;</span>
                     <label class="form-check-label unbold">
-                        <input type="radio" class="form-check-input" name="recheck_redirects" value="false">
+                        <input type="radio" class="form-check-input" name="recheck_redirects" value="false" {% if not recheck_redirects %} checked{% endif %}>
                         False
                     </label>
                 </div>
             </fieldset>
+            {% csrf_token %}
             <button type="submit" class="btn btn-default btn-primary">Update Options</button>
         </form>
     </div>
     <div class="col-lg-4">
         <h3>Scheduled Crawl Config</h3>
         <hr/>
-        <form action="">
+        <form action="/update-schedule/" method="post">
             <div class="form-group">
                 <label for="time_selection">Select a time</label>
                 <select class="form-control" name="time_selection" id="time_selection">
-                    <option value="0">12:00 AM</option>
-                    <option value="3">3:00 AM</option>
-                    <option value="6">6:00 AM</option>
-                    <option value="9">9:00 AM</option>
-                    <option value="12">12:00 PM</option>
-                    <option value="15">3:00 PM</option>
-                    <option value="18">6:00 PM</option>
-                    <option value="21">9:00 PM</option>
+                    <option value="0" {% if time_selection == "0" %} selected {% endif %}>12:00 AM</option>
+                    <option value="3" {% if time_selection == "3" %} selected {% endif %}>3:00 AM</option>
+                    <option value="6" {% if time_selection == "6" %} selected {% endif %}>6:00 AM</option>
+                    <option value="9" {% if time_selection == "9" %} selected {% endif %}>9:00 AM</option>
+                    <option value="12" {% if time_selection == "12" %} selected {% endif %}>12:00 PM</option>
+                    <option value="15" {% if time_selection == "15" %} selected {% endif %}>3:00 PM</option>
+                    <option value="18" {% if time_selection == "18" %} selected {% endif %}>6:00 PM</option>
+                    <option value="21" {% if time_selection == "21" %} selected {% endif %}>9:00 PM</option>
                 </select>
             </div>
             <fieldset class="form-group">
                 <label for="weekly_occurance">Recrawl Website</label>
                 <div class="form-check" id="weekly_occurance">
                     <label class="form-check-label unbold">
-                        <input type="radio" class="form-check-input" name="recheck_redirects" value="daily" checked>
+                        <input type="radio" class="form-check-input" name="weekly_occurance" value="daily" {% if weekly_occurance == "daily" %} checked {% endif %}>
                         Daily
                     </label>
                     <span>&nbsp;&nbsp;</span>
                     <label class="form-check-label unbold">
-                        <input type="radio" class="form-check-input" name="recheck_redirects" value="thricely">
+                        <input type="radio" class="form-check-input" name="weekly_occurance" value="thricely" {% if weekly_occurance == "thricely" %} checked {% endif %}>
                         Every 3 days
                     </label>
                     <span>&nbsp;&nbsp;</span>
                     <label class="form-check-label unbold">
-                        <input type="radio" class="form-check-input" name="recheck_redirects" value="weekly">
+                        <input type="radio" class="form-check-input" name="weekly_occurance" value="weekly" {% if weekly_occurance == "weekly" %} checked {% endif %}>
                         Weekly
                     </label>
                 </div>
             </fieldset>
+            {% csrf_token %}
             <button type="submit" class="btn btn-default btn-primary">Update Schedule</button>
         </form>
         <hr/>
-        <form action="">
-                <button type="submit" class="btn btn-default btn-warning">Crawl Now</button>
+        <form action="/start-crawl/" method="post">
+            <button type="submit" name="crawl-button" class="btn btn-default {% if scanning%}disabled btn-danger{% else %} btn-warning {% endif %}">{% if scanning%}Crawl In Progress{% else %}Crawl Now{% endif %}</button>
+            {% csrf_token %}
         </form>
     </div>
 </div>

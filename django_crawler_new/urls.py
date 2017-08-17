@@ -23,4 +23,7 @@ urlpatterns = [
     url(r'^crawl-settings/', views.crawl_settings, name="crawl-settings"),
     url(r'^link-details/', views.link_details, name="link-details"),
     url(r'^search-results/', views.search_results, name="search-results"),
+    url(r'^update-options/', views.update_options, name="update-options"),
+    url(r'^update-schedule/', views.update_schedule, name="update-schedule"),
+    url(r'^start-crawl/', views.start_crawl, name="start-crawl"),
 ]

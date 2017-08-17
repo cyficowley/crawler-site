@@ -34,10 +34,11 @@ redirects = {}
 local_links_with_params = {}
 header = ""
 
+
 def boot_db():
     # Run every time, starts the database up
     global con
-    con = sqlite3.connect('db.sqlite3')
+    con = sqlite3.connect('./db.sqlite3')
     global cursor
     cursor = con.cursor()
     cursor.execute('''CREATE TABLE IF NOT EXISTS main_app_sites (url text, list text)''')
@@ -83,7 +84,7 @@ def get_redirects(recheck_redirects=True):
     cursor.execute("SELECT * FROM main_app_redirects")
     rows = cursor.fetchall()
     for i in range(0, len(rows)):
-        redirects[rows[i][1]] = rows[i][2]
+        redirects[rows[i][2]] = rows[i][1]
 
     if recheck_redirects:
         redirects_copy = dict(redirects)
@@ -195,7 +196,7 @@ def crawl_only_this_page(url, codes=[404]):
                 link = redirects[link]
             if link not in broke_links:
                 try:
-                    code = requests.head(link, timeout=3, headers=header)
+                    code = requests.get(link, timeout=3, headers=header)
                     if code.status_code in codes:
                         code = requests.get(link, headers=header)
                         if not code.url == link:
@@ -260,7 +261,7 @@ def parse_xml(html, url):
 def get_content(url, old_url):
     # gets the content of an html file, checks for stuff
     try:
-        code = requests.head(url, headers=header)
+        code = requests.get(url, headers=header)
         if code.is_redirect:
             add_redirect(url, requests.get(url, header).url)
         if isinstance(code.status_code, int):
@@ -290,7 +291,7 @@ def check_status(url, old_url):
     # checks status without seatching behond that
     try:
 
-        code = requests.head(url, timeout=3, headers=header)
+        code = requests.get(url, timeout=3, headers=header)
         if isinstance(code.status_code, int):
             update_urls_code(url, code.status_code)
         if old_url not in visited_links[url]:
@@ -320,7 +321,7 @@ def status_change(url, old_urls):
     # checks for a change in the status code without adding it to the visited_links, is for rechecking everything fast
     already_in_database[url] = json.loads(old_urls)
     try:
-        code = requests.head(url, timeout=3, headers=header)
+        code = requests.get(url, timeout=3, headers=header)
         if isinstance(code.status_code, int):
             update_urls_code(url, code.status_code)
         if code.status_code in looking_for:
@@ -345,18 +346,6 @@ def update_urls_code(url, code):
     else:
         cursor.execute("INSERT INTO main_app_statuses (url, code) VALUES ('{}','{}')".format(url,code))
     con.commit()
-
-
-def compare():
-    # not fully useful, is just for comparing the two databases and seeing what is missing in one that is in the other
-    cursor.execute("SELECT * FROM main_app_sites")
-    sites_rows = cursor.fetchall()
-    cursor.execute("SELECT * FROM main_app_statuses")
-    status_rows = cursor.fetchall()
-    status_rows_2 = [each[0] for each in status_rows]
-    for item in sites_rows:
-        if item[0] not in status_rows_2:
-            print(item[0])
 
 
 def find_code(requested_codes):
@@ -401,5 +390,5 @@ def find_link(url):
 def search(url):
     cursor.execute("SELECT * FROM main_app_statuses")
     temp = cursor.fetchall()
-    urls = [i[0] for i in temp]
-    return [i[0] for i in process.extract(url, urls, limit=8)]
+    urls = [i[1] for i in temp]
+    return [i[0] for i in process.extract(url, urls, limit=10)]

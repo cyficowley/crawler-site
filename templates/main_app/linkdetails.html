@@ -12,16 +12,16 @@
 </head>
 <body>
 
-{% include "includes/header.html" %}
+{% include "includes/header.html" with search=search%}
 
 
 <div class="container">
     <div class="jumbotron">
         <h1>Details for Link:</h1>
-        <h3 style="word-wrap:break-word; padding-left: 10%;">https://www.malwarebytes.com/business/endpointprotection/</h3>
+        <h3 style="word-wrap:break-word; padding-left: 10%;"><a id = "main-link" style="text-decoration: none; color:rgb(51,51,51);" href="{{ url }} ">{{ url }}</a> &nbsp;<button id="copyButton" class="btn btn-default" data-clipboard-target = "#main-link">Copy</button></h3>
     </div>
     <div class="col-lg-6">
-        <h3>Current status of link :: 200</h3>
+        <h3>Current status of link :: {{ status }}</h3>
         <hr/>
         <h3>Links on this page</h3>
         <table class="table">
@@ -54,32 +54,31 @@
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td>1.</td>
-                <td>200</td>
-                <td><a href="">https://www.malwarebytes.com/pricing</a></td>
-            </tr>
-            <tr>
-                <td>2.</td>
-                <td>200</td>
-                <td><a href="">https://www.malwarebytes.com/mac</a></td>
-            </tr>
-            <tr>
-                <td>3.</td>
-                <td>200</td>
-                <td><a href="">https://www.malwarebytes.com/mwb-download</a></td>
-            </tr>
-            <tr>
-                <td>4.</td>
-                <td>200</td>
-                <td><a href="">https://www.malwarebytes.com/sitemap.xml</a></td>
-            </tr>
+            {% for i in status_chart %}
+                <tr>
+                    <td>{{i.number}}</td>
+                    <td>{{i.status_code}}</td>
+                    <td><a href="link-details?input={{ i.url }}">{{ i.url }}</a></td>
+                </tr>
+            {% endfor %}
             </tbody>
         </table>
     </div>
 </div>
 
 {% include "includes/footer.html" %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+
+<script type="text/javascript">
+    var clipboard =  new Clipboard('#copyButton');
+    clipboard.on('success', function(e) {
+      e.clearSelection();
+      $("#copyButton").removeClass("btn-default");
+      $("#copyButton").addClass("btn-success");
+      $("#copyButton").text("Copied");
+    });
+</script>
 
 </body>
 </html>

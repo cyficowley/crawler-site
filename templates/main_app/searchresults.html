@@ -12,14 +12,14 @@
 </head>
 <body>
 
-{% include "includes/header.html" %}
+{% include "includes/header.html" with search=search%}
 
 <div class="container">
     <div class="jumbotron">
         <h1>Search Results for:</h1>
-        <form role="search" action="search-results">
+        <form role="search" action="/search-results">
             <div class="form-group input-group" style="padding-left: 10%;">
-                <input type="text" class="form-control input-lg" name="search" placeholder="Search for URL" value="malwarebytes.com/endpoint">
+                <input type="text" class="form-control input-lg" name="search" placeholder="Search for URL" value="{{ main_url }}">
                 <span class="input-group-btn">
                     <button type="submit" class="btn btn-default input-lg">Search</button>
                 </span>
@@ -36,26 +36,13 @@
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td>1.</td>
-                <td>200</td>
-                <td><a href="">https://www.malwarebytes.com/pricing</a></td>
-            </tr>
-            <tr>
-                <td>2.</td>
-                <td>200</td>
-                <td><a href="">https://www.malwarebytes.com/mac</a></td>
-            </tr>
-            <tr>
-                <td>3.</td>
-                <td>200</td>
-                <td><a href="">https://www.malwarebytes.com/mwb-download</a></td>
-            </tr>
-            <tr>
-                <td>4.</td>
-                <td>200</td>
-                <td><a href="">https://www.malwarebytes.com/sitemap.xml</a></td>
-            </tr>
+            {% for i in search_results %}
+                <tr>
+                    <td>{{i.number}}</td>
+                    <td>{{i.status_code}}</td>
+                    <td><a href="/link-details?input={{ i.url }}">{{ i.url }}</a></td>
+                </tr>
+            {% endfor %}
             </tbody>
         </table>
     </div>

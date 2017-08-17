@@ -12,34 +12,31 @@
 </head>
 <body>
 
-{% include "includes/header.html" %}
+{% include "includes/header.html" with search=search%}
 
 <div class="container">
     <div class="jumbotron">
         <h1>Database Access</h1>
     </div>
     <div class="col-lg-8">
-        <h3 class="text-center">All links with a status of (Placeholder) 404 </h3>
+        <h3 class="text-center">All links with a status of {{ searched_for }} </h3>
         <hr/>
-        <table class="table">
+        <table class="table" style="width:100%; table-layout:fixed;">
             <thead>
             <tr>
-                <th>#</th>
-                <th>Status Code</th>
-                <th>Url (click to see details)</th>
+                <th style="width:20%;">#</th>
+                <th style="width:20%;">Status Code</th>
+                <th style="width:60%;">Url (click to see details)</th>
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td>1.</td>
-                <td>404</td>
-                <td><a href="link-details?input=https://www.malwarebytes.com/business/endpointprotection/">https://www.malwarebytes.com/business/endpointprotection/</a></td>
-            </tr>
-            <tr>
-                <td>2.</td>
-                <td>404</td>
-                <td><a href="link-details?input=https://www.malwarebytes.com/business/">https://www.malwarebytes.com/business/</a></td>
-            </tr>
+            {% for i in status %}
+                <tr>
+                    <td style="width:20%;">{{i.number}}</td>
+                    <td style="width:20%;">{{ i.code }}</td>
+                    <td style="width:60%;"><a href="link-details?input={{ i.url }}">{{ i.url }}</a></td>
+                </tr>
+            {% endfor %}
             </tbody>
         </table>
     </div>
@@ -49,7 +46,8 @@
         <form onsubmit="return submit_form()">
             <div class="form-group">
                 <label for="searchbox">Search for Statuses</label>
-                <input class="form-control" id="searchbox" name="statuses" placeholder="ex : 404, 403">
+                {{form}}
+                {% csrf_token %}
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
@@ -60,23 +58,6 @@
         </form>
     </div>
 </div>
-<script>
-    function submit_form(){
-        searchbox = $("#searchbox");
-        current_text = searchbox.val();
-        current_text = current_text.split(",");
-        endstring = "";
-        for (i = 0; i < current_text.length; i ++){
-            endstring += current_text[i].trim() + " "
-        }
-        if(endstring.length > 0){
-            endstring = endstring.substring(0, endstring.length -1);
-        }
-        searchbox.val(endstring);
-        return true;
-    }
-
-</script>
 
 {% include "includes/footer.html" %}
 

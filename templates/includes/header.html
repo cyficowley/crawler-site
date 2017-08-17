@@ -23,13 +23,14 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav links">
                 <li><a href="/">View Database</a></li>
-                <li><a href="crawl-settings">Crawl Website</a></li>
+                <li><a href="/crawl-settings">Crawl Website</a></li>
             </ul>
 
             <!-- SEARCH BAR -->
-            <form class="navbar-form navbar-left" role="search" action="search-results">
+            <form class="navbar-form navbar-left" role="search" action="/search-results">
                 <div class="form-group">
-                    <input type="text" class="form-control" name="search" placeholder="Search for URL">
+                    {{search}}
+                    {%csrf_token%}
                 </div>
                 <button type="submit" class="btn btn-default">Submit</button>
             </form>

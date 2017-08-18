@@ -11,7 +11,8 @@ import threading
 def index(request):
     form1 = forms.statuses
     form2 = forms.search_box
-    dictionary = {'form': form1, "search": form2}
+    settings_dict = get_settings()
+    dictionary = {'form': form1, "search": form2, "crawling":settings_dict["scanning"]}
 
     if request.method == 'GET':
         form1 = forms.statuses(request.GET)
@@ -58,7 +59,6 @@ def crawl_settings(request):
     dictionary = {"search": form2}
     for key, value in settings_dict.items():
         dictionary[key] = value
-    print(dictionary)
     return render(request, "main_app/crawlsettings.html", context=dictionary)
 
 
@@ -125,7 +125,7 @@ def update_schedule(request):
 def start_crawl(request):
     settings_dict = get_settings()
 
-    if not settings_dict["scanning"]:
+    if not settings_dict["scanning"] or True:
         settings_dict["scanning"] = True
         f = open('static/settings.txt', 'w')
         io = StringIO()

@@ -19,7 +19,7 @@
         <h1>Database Access</h1>
     </div>
     <div class="col-lg-8">
-        <h3 class="text-center">All links with a status of {{ searched_for }} </h3>
+        <h3 class="text-center">All links with a status of {{ searched_for }}</h3>
         <hr/>
         <table class="table" style="width:100%; table-layout:fixed;">
             <thead>
@@ -29,7 +29,7 @@
                 <th style="width:60%;">Url (click to see details)</th>
             </tr>
             </thead>
-            <tbody>
+            <tbody id = "select-me">
             {% for i in status %}
                 <tr>
                     <td style="width:20%;">{{i.number}}</td>
@@ -37,6 +37,13 @@
                     <td style="width:60%;"><a href="link-details?input={{ i.url }}">{{ i.url }}</a></td>
                 </tr>
             {% endfor %}
+            {% if crawling %}
+                <tr>
+                    <td id = "select-me-2" style="width:20%;"></td>
+                    <td style="width:20%;"><span style="color:#d9534f">Updating</span></td>
+                    <td id = "select-me-3" style="width:60%;"><div class="progress"><div class="progress-bar progress-bar-striped active progress-bar-danger" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width:100%;"></div></div></td>
+                </tr>
+            {% endif %}
             </tbody>
         </table>
     </div>
@@ -63,6 +70,11 @@
 
 <script>
     $(".links").children().eq(0).addClass("active");
+    {% if crawling %}
+        $("#select-me-2").html($("#select-me").children().length.toString());
+        var swag = $("#select-me-3");
+        swag.children().width(swag.width());
+    {% endif %}
 </script>
 </body>
 </html>

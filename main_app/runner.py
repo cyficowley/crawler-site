@@ -2,13 +2,13 @@ import main_app.crawler as main
 import time
 import json
 from io import StringIO
-import threading
+import subprocess
+import shlex
 
 
 def run():
-    t = threading.Thread(target=run_real, name="run_real")
-    t.daemon = True
-    t.start()
+    commands = shlex.split("python3 -c 'import main_app.runner; main_app.runner.run_real()'")
+    print(subprocess.Popen(commands))
 
 
 def run_real():

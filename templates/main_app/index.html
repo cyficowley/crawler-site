@@ -21,7 +21,7 @@
     <div class="col-lg-8">
         <h3 class="text-center">All links with a status of {{ searched_for }}</h3>
         <hr/>
-        <table class="table" style="width:100%; table-layout:fixed;">
+        <table class="table" id="main-table" style="width:100%; table-layout:fixed;">
             <thead>
             <tr>
                 <th style="width:20%;">#</th>
@@ -30,14 +30,15 @@
             </tr>
             </thead>
             <tbody id = "select-me">
-            {% for i in status %}
-                <tr>
-                    <td style="width:20%;">{{i.number}}</td>
-                    <td style="width:20%;">{{ i.code }}</td>
-                    <td style="width:60%;"><a href="link-details?input={{ i.url }}">{{ i.url }}</a></td>
-                </tr>
-            {% endfor %}
-            {% if crawling %}
+            {% if not crawling %}
+                {% for i in status %}
+                    <tr class="remove-me">
+                        <td style="width:20%;">{{i.number}}</td>
+                        <td style="width:20%;">{{ i.code }}</td>
+                        <td style="width:60%;"><a href="link-details?input={{ i.url }}">{{ i.url }}</a></td>
+                    </tr>
+                {% endfor %}
+            {% else %}
                 <tr>
                     <td id = "select-me-2" style="width:20%;"></td>
                     <td style="width:20%;"><span style="color:#d9534f">Updating</span></td>
@@ -69,12 +70,44 @@
 {% include "includes/footer.html" %}
 
 <script>
+
+    localStorage.setItem("codes", {{ codes }});
+    console.log(localStorage.getItem("codes"));
     $(".links").children().eq(0).addClass("active");
     {% if crawling %}
-        $("#select-me-2").html($("#select-me").children().length.toString());
+        $("#select-me-2").html('#');
         var swag = $("#select-me-3");
         swag.children().width(swag.width());
+        getRefresh();
+        var tid = setInterval(getRefresh, 20000);
     {% endif %}
+    function getRefresh() {
+        var length = $("#select-me").children().length -1;
+        $.ajax({
+            url: '/ajax/update-data/',
+            data: {
+                "length" :length,
+                "codes" : localStorage.getItem("codes")
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('.remove-me').remove();
+                var data_table = data["table"];
+                for(var i = 0; i < data_table.length; i ++){
+                    var adding = ["<tr class = 'remove-me'><td style='width:20%;'>",data_table[i][0],"</td><td style='width:20%;'>",data_table[i][1],"</td><td style='width:60%;'><a href='link-details?input=",data_table[i][2],"'>", data_table[i][2], "</td></tr>"].join("");
+                    $('#main-table').find('tr:last').before(adding);
+                }
+                if(!data["crawling"]){
+                    abortTimer();
+                    location.reload();
+                }
+            }
+        });
+        $("#select-me-2").html('#');
+    }
+    function abortTimer() { // to be called when you want to stop the timer
+        clearInterval(tid);
+    }
 </script>
 </body>
 </html>

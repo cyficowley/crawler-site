@@ -5,6 +5,7 @@ import json
 from main_app import crawler, runner
 from io import StringIO
 import threading
+from django.http import JsonResponse
 
 
 # Create your views here.
@@ -39,14 +40,17 @@ def index(request):
             returned_dict.append({"number": 1, "code": "null", "url": "null"})
         dictionary["status"] = returned_dict
         temp = ""
+        dictionary["codes"] = []
         for each in the_array:
             temp += str(each) + ", "
+            dictionary['codes'].append(each)
         dictionary["searched_for"] = temp[:len(temp) -2]
     else:
         for each2 in crawler.find_code([404]):
             returned_dict.append({"number": num, "code": 404, "url": each2})
             num += 1
         dictionary["status"] = returned_dict
+        dictionary['codes'] = [404]
         dictionary["searched_for"] = 404
 
     return render(request, "main_app/index.html", context=dictionary)
@@ -55,9 +59,12 @@ def index(request):
 def crawl_settings(request):
     form2 = forms.search_box
     settings_dict = get_settings()
+    crawl_stats_dict = get_crawl_stats()
 
     dictionary = {"search": form2}
     for key, value in settings_dict.items():
+        dictionary[key] = value
+    for key, value in crawl_stats_dict.items():
         dictionary[key] = value
     return render(request, "main_app/crawlsettings.html", context=dictionary)
 
@@ -148,3 +155,28 @@ def get_settings():
         f.write(str(io.getvalue()))
         f.close()
     return settings_dict
+
+
+def get_crawl_stats():
+    f = open('static/crawl_stats.txt', 'r').read()
+    if f is not None and not f == "":
+        settings_dict = json.loads(f)
+    else:
+        return {}
+    return settings_dict
+
+
+def update_data(request):
+    crawler.boot_db()
+    the_array = [int(i.strip()) for i in str(request.GET.get('codes', None)).split(",")]
+    returned_dict = {'table': []}
+
+    num = 1
+    for each in the_array:
+        for each2 in crawler.find_code([each]):
+            returned_dict['table'].append([num, each, each2])
+            num += 1
+
+    returned_dict['crawling'] = get_settings()['scanning']
+
+    return JsonResponse(returned_dict)

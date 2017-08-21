@@ -1,5 +1,6 @@
 import main_app.crawler as main
 import time
+from datetime import datetime
 import json
 from io import StringIO
 import subprocess
@@ -24,7 +25,23 @@ def run_real():
     main.boot_db()
     main.get_redirects(settings_dict["recheck_redirects"])
     main.start_crawl(settings_dict["start_page"])
-    print("--- %s seconds ---" % (time.time() - start_time))
+
+    crawl_stats = {}
+    seconds = time.time() - start_time
+    m, s = divmod(seconds, 60)
+    h, m = divmod(m, 60)
+    crawl_stats['time_to_complete'] = "%d hours, %02d minutes and %02d seconds" % (h, m, s)
+
+    d = datetime.now()
+    current_time = d.strftime("%I:%M %p")
+    current_date = d.strftime("%m/%d/%y")
+    crawl_stats['full_time'] = current_date + " at " + current_time
+
+    f = open('static/crawl_stats.txt', 'w')
+    io = StringIO()
+    json.dump(crawl_stats, io)
+    f.write(str(io.getvalue()))
+    f.close()
 
     f = open('static/settings.txt', 'r').read()
     settings_dict = {}

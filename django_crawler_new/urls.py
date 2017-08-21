@@ -26,4 +26,5 @@ urlpatterns = [
     url(r'^update-options/', views.update_options, name="update-options"),
     url(r'^update-schedule/', views.update_schedule, name="update-schedule"),
     url(r'^start-crawl/', views.start_crawl, name="start-crawl"),
+    url(r'^ajax/update-data/$', views.update_data, name='update_data'),
 ]

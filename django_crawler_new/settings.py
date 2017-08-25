@@ -25,9 +25,9 @@ static_dir = os.path.join(BASE_DIR, 'static')
 SECRET_KEY = '^3v@2j9uz&ybgutv((_mum2k6h63seb4yjiq_u%h=ul)@tb%0n'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -125,12 +125,4 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     static_dir,
 ]
-
-#CELERY
-BROKER_URL = 'redis://localhost:6379'
-CELERY_RESULT_BACKEND = 'redis://localhost:6379'
-CELERY_ACCEPT_CONTENT = ['application/json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
-CELERY_TIMEZONE = 'Africa/Nairobi'
 

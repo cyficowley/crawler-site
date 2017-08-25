@@ -5,7 +5,7 @@ import requests
 import sqlite3
 import json
 from io import StringIO
-import time
+from datetime import datetime
 from fuzzywuzzy import process
 
 
@@ -21,7 +21,7 @@ class HrefParser(HTMLParser):
                 self.hrefs.add(dict_attrs['href'])
 
     def error(self, message):
-        print(message)
+        pass
 
 
 visited_links = {}

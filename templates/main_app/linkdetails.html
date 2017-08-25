@@ -18,29 +18,33 @@
 <div class="container">
     <div class="jumbotron">
         <h1>Details for Link:</h1>
-        <h3 style="word-wrap:break-word; padding-left: 10%;"><a id = "main-link" style="text-decoration: none; color:rgb(51,51,51);" href="{{ url }} ">{{ url }}</a> &nbsp;<button id="copyButton" class="btn btn-default" data-clipboard-target = "#main-link">Copy</button></h3>
+        <h3 style="word-wrap:break-word; padding-left: 10%;"><a id = "main-link" target="_blank" style="text-decoration: underline; color:rgb(51,51,51);" href="{{ url }} ">{{ url }}</a> <button id="copyButton" class="btn btn-default" data-clipboard-target = "#main-link">Copy</button></h3>
     </div>
     <div class="col-lg-6">
         <h3>Current status of link :: {{ status }}</h3>
         <hr/>
-        <h3>Links on this page</h3>
-        <table class="table">
-            <thead>
-            <tr>
-                <th>#</th>
-                <th>Status Code</th>
-                <th>Url (click to see details)</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>1.</td>
-                <td>Null</td>
-                <td><a href="">Click crawl only this page to find links on page</a></td>
-            </tr>
-            </tbody>
-        </table>
-        <form><button class="btn-success btn-default btn">Crawl Only This Page</button> </form>
+        <div id="replaceable">
+            <h3>Links responding with 404 on this page</h3>
+            <table class="table" id="crawl-table">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Url (click to see details)</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="remove-me">
+                    <td>1.</td>
+                    <td>Click crawl only this page to find links on page</td>
+                </tr>
+                </tbody>
+            </table>
+            <button type="button" onclick="crawl_page()" class="btn-success btn-default btn">Crawl Only This Page</button>
+        </div>
+        <div id="not_replaceable" class="hidden">
+            <h3>Please wait, the page is currently being crawled</h3>
+            <p>(DISCLAIMER: links that rely on queries will be seen as 404s when crawling only one page)</p>
+        </div>
     </div>
     <div class="col-lg-6">
         <h3>Where this page is linked from</h3>
@@ -74,11 +78,35 @@
     var clipboard =  new Clipboard('#copyButton');
     clipboard.on('success', function(e) {
       e.clearSelection();
-      $("#copyButton").removeClass("btn-default");
-      $("#copyButton").addClass("btn-success");
-      $("#copyButton").text("Copied");
+      var copyButton = $("#copyButton");
+      copyButton.removeClass("btn-default");
+      copyButton.addClass("btn-success");
+      copyButton.text("Copied");
     });
+    function switch_text() {
+        $('#replaceable').toggleClass("hidden");
+        $('#not_replaceable').toggleClass("hidden");
+    }
+    function crawl_page() {
+        switch_text();
+        $.ajax({
+            url: '/ajax/crawl-page/',
+            data: {
+                "main_url" : $("#main-link").html()
+            },
+            dataType: 'json',
+            timeout: 60000,
+            success: function (data) {
+                $('.remove-me').remove();
+                var data_table = data["broken_urls"];
+                for(var i = 0; i < data_table.length; i ++){
+                    var adding = ["<tr class = 'remove-me'><td>",i + 1,"</td><td><a href='link-details?input=",data_table[i],"'>", data_table[i], "</td></tr>"].join("");
+                    $('#crawl-table').find('tr:last').after(adding);
+                }
+                switch_text();
+            }
+        });
+    }
 </script>
-
 </body>
 </html>

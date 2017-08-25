@@ -4,7 +4,6 @@ from . import forms
 import json
 from main_app import crawler, runner
 from io import StringIO
-import threading
 from django.http import JsonResponse
 
 
@@ -126,6 +125,26 @@ def update_schedule(request):
     json.dump(settings_dict, io)
     f.write(str(io.getvalue()))
     f.close()
+    import crontab
+    import os
+    tab = crontab.CronTab(user='ccowley')
+    for job in tab:
+        tab.remove(job)
+        tab.write()
+    print(tab.render())
+    tab = crontab.CronTab(user='ccowley')
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    runner_dir = os.path.join(BASE_DIR, "main_app/runner.py")
+    cmd = "cd {} && /usr/local/bin/python3 {} {}".format(BASE_DIR, runner_dir, BASE_DIR)
+    cron_job = tab.new(cmd, comment="this is the main command")
+    cron_job.minute.on(0)
+    cron_job.hour.on(settings_dict['time_selection'])
+    if settings_dict['weekly_occurance'] == 'thricely':
+        cron_job.dow.on(1, 3, 5)
+    if settings_dict['weekly_occurance'] == 'weekly':
+        cron_job.dow.on(1)
+    tab.write()
+    print(tab.render())
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
@@ -133,12 +152,6 @@ def start_crawl(request):
     settings_dict = get_settings()
 
     if not settings_dict["scanning"] or True:
-        settings_dict["scanning"] = True
-        f = open('static/settings.txt', 'w')
-        io = StringIO()
-        json.dump(settings_dict, io)
-        f.write(str(io.getvalue()))
-        f.close()
         runner.run()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
@@ -180,3 +193,12 @@ def update_data(request):
     returned_dict['crawling'] = get_settings()['scanning']
 
     return JsonResponse(returned_dict)
+
+
+def crawl_page(request):
+    print("swaggy")
+    crawler.boot_db()
+    returned_data = crawler.crawl_only_this_page(request.GET.get('main_url', None))
+    if len(returned_data) == 0:
+        returned_data = ['No broken urls on page']
+    return JsonResponse({'broken_urls': returned_data})

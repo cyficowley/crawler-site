@@ -1,4 +1,3 @@
-import main_app.crawler as main
 import time
 from datetime import datetime
 import json
@@ -13,6 +12,14 @@ def run():
 
 
 def run_real():
+    import main_app.crawler as main
+    settings_dict = get_settings()
+    settings_dict["scanning"] = True
+    f = open('static/settings.txt', 'w')
+    io = StringIO()
+    json.dump(settings_dict, io)
+    f.write(str(io.getvalue()))
+    f.close()
     print("im starting Crawl")
     f = open('static/settings.txt', 'r').read()
     settings_dict = {}
@@ -36,6 +43,7 @@ def run_real():
     current_time = d.strftime("%I:%M %p")
     current_date = d.strftime("%m/%d/%y")
     crawl_stats['full_time'] = current_date + " at " + current_time
+    print(crawl_stats)
 
     f = open('static/crawl_stats.txt', 'w')
     io = StringIO()
@@ -53,3 +61,23 @@ def run_real():
     json.dump(settings_dict, io)
     f.write(str(io.getvalue()))
     f.close()
+    print("finished")
+
+
+def get_settings():
+    f = open('static/settings.txt', 'r').read()
+    if f is not None and not f == "":
+        settings_dict = json.loads(f)
+    else:
+        settings_dict = json.loads(open('static/backup_settings.txt', 'r').read())
+        f = open('static/settings.txt', 'w')
+        io = StringIO()
+        json.dump(settings_dict, io)
+        f.write(str(io.getvalue()))
+        f.close()
+    return settings_dict
+
+if __name__ == "__main__":
+    import sys
+    sys.path.append(sys.argv[1])
+    run_real()

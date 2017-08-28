@@ -13,13 +13,6 @@ def run():
 
 def run_real():
     import main_app.crawler as main
-    settings_dict = get_settings()
-    settings_dict["scanning"] = True
-    f = open('static/settings.txt', 'w')
-    io = StringIO()
-    json.dump(settings_dict, io)
-    f.write(str(io.getvalue()))
-    f.close()
     print("im starting Crawl")
     f = open('static/settings.txt', 'r').read()
     settings_dict = {}

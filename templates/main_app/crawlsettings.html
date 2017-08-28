@@ -54,18 +54,18 @@
             </div>
             <div class="form-group">
                 <label for="start_page">Starting From</label>
-                <input class="form-control" id="start_page" name="start_page" placeholder="https://www.malwarebytes.com/sitemap.xml" value={{ start_page }}>
+                <input class="form-control" id="start_page" name="start_page" placeholder="https://www.malwarebytes.com/sitemap.xml" value="{{ start_page|join:", " }}">
             </div>
             <fieldset class="form-group">
                 <label for="trymeout">Recheck Redirects:</label>
                 <div class="form-check" id="trymeout">
                     <label class="form-check-label unbold">
-                        <input type="radio" class="form-check-input" name="recheck_redirects" value="true" {% if recheck_redirects %} checked{% endif %}>
+                        <input type="radio" class="form-check-input" name="recheck_redirects" value="true" {% if recheck_redirects == 'true' %} checked{% endif %}>
                         True
                     </label>
                     <span>&nbsp;&nbsp;</span>
                     <label class="form-check-label unbold">
-                        <input type="radio" class="form-check-input" name="recheck_redirects" value="false" {% if not recheck_redirects %} checked{% endif %}>
+                        <input type="radio" class="form-check-input" name="recheck_redirects" value="false" {% if not recheck_redirects == 'true' %} checked{% endif %}>
                         False
                     </label>
                 </div>
@@ -124,7 +124,7 @@
 {% include "includes/footer.html" %}
 
 <script>
-        $(".links").children().eq(1).addClass("active");
+    $(".links").children().eq(1).addClass("active");
 </script>
 </body>
 </html>

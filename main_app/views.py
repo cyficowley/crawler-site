@@ -104,8 +104,8 @@ def update_options(request):
     settings_dict = get_settings()
 
     settings_dict["allowed_urls"] = [i.strip() for i in request.POST.get('allowed_urls', "").split(",")]
-    settings_dict["disallowed_urls"] = [request.POST.get('disallowed_urls', "")]
-    settings_dict["start_page"] = request.POST.get('start_page', "")
+    settings_dict["disallowed_urls"] = [i.strip() for i in request.POST.get('disallowed_urls', "").split(",")]
+    settings_dict["start_page"] = [i.strip() for i in request.POST.get('start_page', "").split(",")]
     settings_dict["recheck_redirects"] = request.POST.get('recheck_redirects', "")
     f = open('static/settings.txt', 'w')
     io = StringIO()
@@ -152,6 +152,13 @@ def start_crawl(request):
     settings_dict = get_settings()
 
     if not settings_dict["scanning"] or True:
+        settings_dict = get_settings()
+        settings_dict["scanning"] = True
+        f = open('static/settings.txt', 'w')
+        io = StringIO()
+        json.dump(settings_dict, io)
+        f.write(str(io.getvalue()))
+        f.close()
         runner.run()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
@@ -196,7 +203,6 @@ def update_data(request):
 
 
 def crawl_page(request):
-    print("swaggy")
     crawler.boot_db()
     returned_data = crawler.crawl_only_this_page(request.GET.get('main_url', None))
     if len(returned_data) == 0:

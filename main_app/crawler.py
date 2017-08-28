@@ -5,7 +5,6 @@ import requests
 import sqlite3
 import json
 from io import StringIO
-from datetime import datetime
 from fuzzywuzzy import process
 
 
@@ -25,7 +24,6 @@ class HrefParser(HTMLParser):
 
 
 visited_links = {}
-ugly_links = {}
 looking_for = set()
 already_in_database = {}
 accepted_domains = set()
@@ -175,12 +173,13 @@ def set_disallowed_domains(accepted_domain):
         disallowed_domains.add(each)
 
 
-def start_crawl(url, codes=[404]):
+def start_crawl(start_urls, codes=[404]):
     # starts the crawler, run at beginning to re-crawl the entire website
     set_looking_for(codes)
     cursor.execute("DELETE FROM main_app_statuses")
-    print("\n\n\n\nCrawling website, starting at {}".format(url))
-    crawl_site(url, "")
+    print("\n\n\n\nCrawling website, starting at {}".format(start_urls[0]))
+    for each in start_urls:
+        crawl_site(each, "")
     rebuild_db()
 
 
@@ -235,13 +234,7 @@ def crawl_site(url, old_url):
                         for link in get_local_links(html, url):
                             crawl_site(link, url)
                 else:
-                    check_status(url,old_url)
-            else:
-                if url not in ugly_links:
-                    ugly_links[url] = [old_url]
-                else:
-                    ugly_links[url].append(old_url)
-
+                    check_status(url, old_url)
         else:
             if old_url not in visited_links[url]:
                 visited_links[url].append(old_url)
@@ -270,14 +263,14 @@ def get_content(url, old_url):
             previous_url = url
             if url in local_links_with_params:
                 url = local_links_with_params[url]
-            code = requests.get(url, headers=header)
+                code = requests.get(url, headers=header)
             if code.status_code in looking_for:
                 print("this url {} from {} is broken with code {}".format(url, old_url, code.status_code))
             else:
                 add_redirect(previous_url, url)
                 update_urls_code(url, code.status_code)
+                return code.text
         elif ".jpg" not in url and ".pdf" not in url and "downloads.malwarebytes.com" not in url:
-            code = requests.get(url, timeout=3, headers=header)
             if not code.url == url:
                 add_redirect(url, code.url)
             return code.text
@@ -290,7 +283,6 @@ def get_content(url, old_url):
 def check_status(url, old_url):
     # checks status without seatching behond that
     try:
-
         code = requests.get(url, timeout=3, headers=header)
         if isinstance(code.status_code, int):
             update_urls_code(url, code.status_code)

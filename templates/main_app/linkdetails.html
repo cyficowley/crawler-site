@@ -43,7 +43,7 @@
         </div>
         <div id="not_replaceable" class="hidden">
             <h3>Please wait, the page is currently being crawled</h3>
-            <p>(DISCLAIMER: links that rely on queries will be seen as 404s when crawling only one page)</p>
+            <p>(This usually takes around 30-45 seconds)</p>
         </div>
     </div>
     <div class="col-lg-6">
@@ -102,6 +102,9 @@
                 for(var i = 0; i < data_table.length; i ++){
                     var adding = ["<tr class = 'remove-me'><td>",i + 1,"</td><td><a href='link-details?input=",data_table[i],"'>", data_table[i], "</td></tr>"].join("");
                     $('#crawl-table').find('tr:last').after(adding);
+                }
+                if(data_table.length === 0){
+                    $('#crawl-table').find('tr:last').after("<tr class = 'remove-me'><td>1</td><td>No 404s on page</td></tr>");
                 }
                 switch_text();
             }

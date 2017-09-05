@@ -17,7 +17,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 templates_dir = os.path.join(BASE_DIR, 'templates')
 static_dir = os.path.join(BASE_DIR, 'static')
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
@@ -25,10 +24,11 @@ static_dir = os.path.join(BASE_DIR, 'static')
 SECRET_KEY = '^3v@2j9uz&ybgutv((_mum2k6h63seb4yjiq_u%h=ul)@tb%0n'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+STATIC_ROOT = os.path.join(BASE_DIR)
 
 # Application definition
 
@@ -109,7 +109,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Los_Angeles'
 
 USE_I18N = True
 
@@ -125,4 +125,3 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     static_dir,
 ]
-

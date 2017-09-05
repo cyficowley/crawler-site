@@ -120,6 +120,8 @@ def update_schedule(request):
 
     settings_dict["weekly_occurance"] = request.POST.get('weekly_occurance', "")
     settings_dict["time_selection"] = request.POST.get('time_selection', "")
+    settings_dict["day_of_week"] = request.POST.get('day_of_week', "")
+    print(settings_dict["day_of_week"])
     f = open('static/settings.txt', 'w')
     io = StringIO()
     json.dump(settings_dict, io)
@@ -142,7 +144,7 @@ def update_schedule(request):
     if settings_dict['weekly_occurance'] == 'thricely':
         cron_job.dow.on(1, 3, 5)
     if settings_dict['weekly_occurance'] == 'weekly':
-        cron_job.dow.on(1)
+        cron_job.dow.on(settings_dict["day_of_week"])
     tab.write()
     print(tab.render())
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

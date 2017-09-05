@@ -30,7 +30,7 @@ accepted_domains = set()
 disallowed_domains = set()
 redirects = {}
 local_links_with_params = {}
-header = ""
+headers = {"User-Agent": "cyrus-bot", 'From': 'cyficowley@gmail.com'}
 
 
 def boot_db():
@@ -88,7 +88,7 @@ def get_redirects(recheck_redirects=True):
         redirects_copy = dict(redirects)
         for key, value in redirects_copy.items():
             try:
-                code = requests.get(key, headers=header)
+                code = requests.get(key, headers=headers)
                 new_url = code.url
                 if not (code.status_code == 404 and key in value):
                     if new_url.endswith("/"):
@@ -187,19 +187,23 @@ def crawl_only_this_page(url, codes=[404]):
     # only crawls a single web page looking for broken links.  Perfect for making sure dev page is working
     html = get_content(url, "")
     broke_links = []
+    used_links = []
     if html is not None:
         for link in get_local_links(html, url):
             if link.endswith("/"):
                 link = link[:len(link) -1]
             if link in redirects:
                 link = redirects[link]
-            if link not in broke_links:
+            if link not in broke_links and link not in used_links:
+                used_links.append(link)
                 try:
-                    code = requests.get(link, timeout=3, headers=header)
+                    code = requests.get(link, timeout=3, headers=headers)
+                    if not code.url == link:
+                        add_redirect(link, code.url)
                     if code.status_code in codes:
-                        code = requests.get(link, headers=header)
-                        if not code.url == link:
-                            add_redirect(link, code.url)
+                        if link in local_links_with_params:
+                            link = local_links_with_params[link]
+                            code = requests.get(link, headers=headers)
                         if code.status_code in codes:
                             broke_links.append(link)
                 except requests.ConnectionError as e:
@@ -254,16 +258,16 @@ def parse_xml(html, url):
 def get_content(url, old_url):
     # gets the content of an html file, checks for stuff
     try:
-        code = requests.get(url, headers=header)
+        code = requests.get(url, headers=headers)
         if code.is_redirect:
-            add_redirect(url, requests.get(url, header).url)
+            add_redirect(url, code.url)
         if isinstance(code.status_code, int):
             update_urls_code(url, code.status_code)
         if code.status_code in looking_for:
             previous_url = url
             if url in local_links_with_params:
                 url = local_links_with_params[url]
-                code = requests.get(url, headers=header)
+                code = requests.get(url, headers=headers)
             if code.status_code in looking_for:
                 print("this url {} from {} is broken with code {}".format(url, old_url, code.status_code))
             else:
@@ -283,7 +287,7 @@ def get_content(url, old_url):
 def check_status(url, old_url):
     # checks status without seatching behond that
     try:
-        code = requests.get(url, timeout=3, headers=header)
+        code = requests.get(url, timeout=3, headers=headers)
         if isinstance(code.status_code, int):
             update_urls_code(url, code.status_code)
         if old_url not in visited_links[url]:
@@ -292,7 +296,7 @@ def check_status(url, old_url):
             previous_url = url
             if url in local_links_with_params:
                 url = local_links_with_params[url]
-            code = requests.get(url, headers=header)
+            code = requests.get(url, headers=headers)
             if code.status_code in looking_for:
                 print("this url {} from {} is broken with code {}".format(url, old_url, code.status_code))
             else:
@@ -313,15 +317,13 @@ def status_change(url, old_urls):
     # checks for a change in the status code without adding it to the visited_links, is for rechecking everything fast
     already_in_database[url] = json.loads(old_urls)
     try:
-        code = requests.get(url, timeout=3, headers=header)
+        code = requests.get(url, timeout=3, headers=headers)
         if isinstance(code.status_code, int):
             update_urls_code(url, code.status_code)
         if code.status_code in looking_for:
-            code = requests.get(url, headers=header)
-            if code.status_code in looking_for:
-                print("this link {} is returning {}".format(url, code.status_code))
-            else:
-                update_urls_code(url, code.status_code)
+            print("this link {} is returning {}".format(url, code.status_code))
+        else:
+            update_urls_code(url, code.status_code)
         return code.status_code
     except requests.ConnectionError as e:
         print("link {} dropped this error, {}".format(url, e))

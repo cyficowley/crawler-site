@@ -205,6 +205,4 @@ def update_data(request):
 def crawl_page(request):
     crawler.boot_db()
     returned_data = crawler.crawl_only_this_page(request.GET.get('main_url', None))
-    if len(returned_data) == 0:
-        returned_data = ['No broken urls on page']
     return JsonResponse({'broken_urls': returned_data})

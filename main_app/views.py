@@ -5,7 +5,9 @@ import json
 from main_app import crawler, runner
 from io import StringIO
 from django.http import JsonResponse
+import logging
 
+logger = logging.getLogger("django")
 
 # Create your views here.
 def index(request):
@@ -121,7 +123,6 @@ def update_schedule(request):
     settings_dict["weekly_occurance"] = request.POST.get('weekly_occurance', "")
     settings_dict["time_selection"] = request.POST.get('time_selection', "")
     settings_dict["day_of_week"] = request.POST.get('day_of_week', "")
-    print(settings_dict["day_of_week"])
     f = open('static/settings.txt', 'w')
     io = StringIO()
     json.dump(settings_dict, io)
@@ -133,7 +134,6 @@ def update_schedule(request):
     for job in tab:
         tab.remove(job)
         tab.write()
-    print(tab.render())
     tab = crontab.CronTab(user='ccowley')
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     runner_dir = os.path.join(BASE_DIR, "main_app/runner.py")
@@ -146,7 +146,7 @@ def update_schedule(request):
     if settings_dict['weekly_occurance'] == 'weekly':
         cron_job.dow.on(settings_dict["day_of_week"])
     tab.write()
-    print(tab.render())
+    logger.info(tab.render())
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 

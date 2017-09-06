@@ -104,8 +104,8 @@
                     </label>
                     <span>&nbsp;&nbsp;</span>
                     <label class="form-check-label unbold">
-                        <input type="radio" class="form-check-input" name="weekly_occurance" value="thricely" {% if weekly_occurance == "thricely" %} checked {% endif %}>
-                        Every 3 days
+                        <input type="radio" class="form-check-input" name="weekly_occurance" value="thricely" id="thricely_button" {% if weekly_occurance == "thricely" %} checked {% endif %}>
+                        3 Times Weekly
                     </label>
                     <span>&nbsp;&nbsp;</span>
                     <label class="form-check-label unbold">
@@ -124,7 +124,9 @@
                             <option {% if day_of_week == "6" %} selected {% endif %} value="6">Saturday</option>
                         </select>
                     </div>
-
+                    <div id="only_if_tricely" class="hidden">
+                        <p>Scans on Monday, Wednesday and Friday</p>
+                    </div>
                 </div>
             </fieldset>
             {% csrf_token %}
@@ -142,17 +144,26 @@
 
 <script>
     $(".links").children().eq(1).addClass("active");
-    var only_weekly = $("#only_if_weekly");
     if ($('#weekly_button').is(':checked')) {
         $("#only_if_weekly").removeClass("hidden");
-    }else{
+        $("#only_if_tricely").addClass("hidden");
+    }else if($('#thricely_button').is(':checked')){
+        $("#only_if_tricely").removeClass("hidden");
         $("#only_if_weekly").addClass("hidden");
+    } else{
+        $("#only_if_weekly").addClass("hidden");
+        $("#only_if_tricely").addClass("hidden");
     }
     $('#weekly_occurance').click(function () {
         if ($('#weekly_button').is(':checked')) {
             $("#only_if_weekly").removeClass("hidden");
-        }else{
+            $("#only_if_tricely").addClass("hidden");
+        }else if($('#thricely_button').is(':checked')){
+            $("#only_if_tricely").removeClass("hidden");
             $("#only_if_weekly").addClass("hidden");
+        } else{
+            $("#only_if_weekly").addClass("hidden");
+            $("#only_if_tricely").addClass("hidden");
         }
     });
 </script>

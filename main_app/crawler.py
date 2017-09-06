@@ -106,17 +106,20 @@ def get_redirects(recheck_redirects=True):
                         con.commit()
 
             except requests.ConnectionError as e:
-                print("link {} dropped this error, {}".format(key, e))
+                # logger.info("link {} dropped this error, {}".format(key, e))
+                pass
             except requests.exceptions.Timeout as e:
-                print("link {} timed out".format(key))
+                # logger.info("link {} timed out".format(key))
+                pass
             except requests.exceptions.InvalidSchema as e:
-                print("wait this broke {}".format(key))
+                # logger.info("wait this broke {}".format(key))
+                pass
 
 
 def check_old(codes=[404]):
     # checks all old links in database, to see if any have been moved
     set_looking_for(codes)
-    print("Rechecking links in database \n\n\n\n")
+    # logger.info("Rechecking links in database \n\n\n\n")
     urls = get_all()
     for group in urls:
         status_change(group[0], group[1])
@@ -124,6 +127,7 @@ def check_old(codes=[404]):
 
 def set_looking_for(input):
     # sets what error codes will be printed
+    pass
     for each in input:
         looking_for.add(each)
 
@@ -135,7 +139,8 @@ def get_local_links(html, url):
     try:
         parser.feed(html)
     except TypeError as e:
-        print("Error in parsing url {}, {}".format(url, e))
+        # logger.info("Error in parsing url {}, {}".format(url, e))
+        pass
 
     for link in parser.hrefs:
         parsed = urlparse(link, allow_fragments=True)
@@ -177,7 +182,8 @@ def start_crawl(start_urls, codes=[404]):
     # starts the crawler, run at beginning to re-crawl the entire website
     set_looking_for(codes)
     cursor.execute("DELETE FROM main_app_statuses")
-    print("\n\n\n\nCrawling website, starting at {}".format(start_urls[0]))
+    # logger.info("\n\n\n\nCrawling website, starting at {}".format(start_urls[0]))
+    pass
     for each in start_urls:
         crawl_site(each, "")
     rebuild_db()
@@ -207,13 +213,16 @@ def crawl_only_this_page(url, codes=[404]):
                         if code.status_code in codes:
                             broke_links.append(link)
                 except requests.ConnectionError as e:
-                    print("link {} : {}".format(url, e))
+                    # logger.info("link {} : {}".format(url, e))
+                    pass
                 except requests.exceptions.Timeout as e:
-                    print("link {}  timed out".format(url))
+                    # logger.info("link {}  timed out".format(url))
+                    pass
                 except requests.exceptions.InvalidSchema as e:
                     pass
                 except requests.exceptions.MissingSchema as e:
-                    print(link)
+                    # logger.info(link)
+                    pass
     return broke_links
 
 
@@ -269,7 +278,8 @@ def get_content(url, old_url):
                 url = local_links_with_params[url]
                 code = requests.get(url, headers=headers)
             if code.status_code in looking_for:
-                print("this url {} from {} is broken with code {}".format(url, old_url, code.status_code))
+                # logger.info("this url {} from {} is broken with code {}".format(url, old_url, code.status_code))
+                pass
             else:
                 add_redirect(previous_url, url)
                 update_urls_code(url, code.status_code)
@@ -279,9 +289,11 @@ def get_content(url, old_url):
                 add_redirect(url, code.url)
             return code.text
     except requests.ConnectionError as e:
-        print("link {} : {}".format(url, e))
+        # logger.info("link {} : {}".format(url, e))
+        pass
     except requests.exceptions.Timeout as e:
-        print("link {}  timed out".format(url))
+        # logger.info("link {}  timed out".format(url))
+        pass
 
 
 def check_status(url, old_url):
@@ -298,19 +310,23 @@ def check_status(url, old_url):
                 url = local_links_with_params[url]
             code = requests.get(url, headers=headers)
             if code.status_code in looking_for:
-                print("this url {} from {} is broken with code {}".format(url, old_url, code.status_code))
+                # logger.info("this url {} from {} is broken with code {}".format(url, old_url, code.status_code))
+                pass
             else:
                 add_redirect(previous_url, url)
                 update_urls_code(url, code.status_code)
         return code.status_code
     except requests.ConnectionError as e:
-        print("link {} : {}".format(url,  e))
+        # logger.info("link {} : {}".format(url,  e))
+        pass
     except requests.exceptions.Timeout as e:
-        print("link {}  timed out".format(url))
+        # logger.info("link {}  timed out".format(url))
+        pass
     except requests.exceptions.InvalidSchema as e:
         del visited_links[url]
     except UnicodeError as e:
-        print("unicode screwed up on link {} from {}".format(url, old_url))
+        # logger.info("unicode screwed up on link {} from {}".format(url, old_url))
+        pass
 
 
 def status_change(url, old_urls):
@@ -321,16 +337,20 @@ def status_change(url, old_urls):
         if isinstance(code.status_code, int):
             update_urls_code(url, code.status_code)
         if code.status_code in looking_for:
-            print("this link {} is returning {}".format(url, code.status_code))
+            # logger.info("this link {} is returning {}".format(url, code.status_code))
+            pass
         else:
             update_urls_code(url, code.status_code)
         return code.status_code
     except requests.ConnectionError as e:
-        print("link {} dropped this error, {}".format(url, e))
+        # logger.info("link {} dropped this error, {}".format(url, e))
+        pass
     except requests.exceptions.Timeout as e:
-        print("link {} timed out".format(url))
+        # logger.info("link {} timed out".format(url))
+        pass
     except requests.exceptions.InvalidSchema as e:
-        print("wait this broke {}".format(url))
+        # logger.info("wait this broke {}".format(url))
+        pass
 
 
 def update_urls_code(url, code):

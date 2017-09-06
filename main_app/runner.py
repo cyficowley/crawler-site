@@ -8,12 +8,11 @@ import shlex
 
 def run():
     commands = shlex.split("python3 -c 'import main_app.runner; main_app.runner.run_real()'")
-    print(subprocess.Popen(commands))
+    subprocess.Popen(commands)
 
 
 def run_real():
     import main_app.crawler as main
-    print("im starting Crawl")
     f = open('static/settings.txt', 'r').read()
     settings_dict = {}
     if f is not None and not f == "":
@@ -36,7 +35,6 @@ def run_real():
     current_time = d.strftime("%I:%M %p")
     current_date = d.strftime("%m/%d/%y")
     crawl_stats['full_time'] = current_date + " at " + current_time
-    print(crawl_stats)
 
     f = open('static/crawl_stats.txt', 'w')
     io = StringIO()
@@ -54,7 +52,6 @@ def run_real():
     json.dump(settings_dict, io)
     f.write(str(io.getvalue()))
     f.close()
-    print("finished")
 
 
 def get_settings():

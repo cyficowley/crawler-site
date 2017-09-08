@@ -1,0 +1,1 @@
+{"allowed_urls": ["www.malwarebytes.com", "staging-www.malwarebytes.com", "support.malwarebytes.com"], "disallowed_urls": [""], "start_page": ["https://www.malwarebytes.com/sitemap.xml", "https://staging-www.malwarebytes.com/"], "recheck_redirects": "false", "weekly_occurance": "weekly", "time_selection": "3", "scanning": false, "day_of_week": "2"}

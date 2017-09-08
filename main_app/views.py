@@ -6,6 +6,7 @@ from main_app import crawler, runner
 from io import StringIO
 from django.http import JsonResponse
 import logging
+import getpass
 
 logger = logging.getLogger("django")
 
@@ -130,11 +131,11 @@ def update_schedule(request):
     f.close()
     import crontab
     import os
-    tab = crontab.CronTab(user='ccowley')
+    tab = crontab.CronTab(user=getpass.getuser())
     for job in tab:
         tab.remove(job)
         tab.write()
-    tab = crontab.CronTab(user='ccowley')
+    tab = crontab.CronTab(user=getpass.getuser())
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     runner_dir = os.path.join(BASE_DIR, "main_app/runner.py")
     cmd = "cd {} && /usr/local/bin/python3 {} {}".format(BASE_DIR, runner_dir, BASE_DIR)

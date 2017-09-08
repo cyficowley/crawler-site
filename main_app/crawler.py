@@ -6,6 +6,7 @@ import sqlite3
 import json
 from io import StringIO
 from fuzzywuzzy import process
+from pympler import asizeof
 
 
 class HrefParser(HTMLParser):
@@ -47,17 +48,17 @@ def boot_db():
 
 def rebuild_db():
     # is run by start_crawl, rewrites the sites database after it has been entirely crawled
-    cursor.execute("DELETE FROM main_app_sites")
+    execute("DELETE FROM main_app_sites")
     for key, value in visited_links.items():
         io = StringIO()
         json.dump(value,io)
-        cursor.execute("INSERT INTO main_app_sites (url, list) VALUES ('{}','{}')".format(key,io.getvalue()))
+        execute("INSERT INTO main_app_sites (url, list) VALUES ('{}','{}')".format(key,io.getvalue()))
         con.commit()
 
 
 def get_all():
     # returns all the things from the sites database
-    cursor.execute("SELECT * FROM main_app_sites")
+    execute("SELECT * FROM main_app_sites")
     rows = cursor.fetchall()
     return rows
 
@@ -70,16 +71,16 @@ def add_redirect(url, new_url):
         new_url = new_url[:len(new_url)-1]
     if (url not in redirects or not redirects[url] == new_url) and not url == new_url:
         redirects[url] = new_url
-        if cursor.execute("SELECT EXISTS(SELECT 1 FROM main_app_redirects WHERE old_url='{}' LIMIT 1)".format(url)).fetchone()[0] == 1:
-            cursor.execute("UPDATE main_app_redirects SET new_url='{}' WHERE old_url='{}'".format(new_url, url))
+        if execute("SELECT EXISTS(SELECT 1 FROM main_app_redirects WHERE old_url='{}' LIMIT 1)".format(url)).fetchone()[0] == 1:
+            execute("UPDATE main_app_redirects SET new_url='{}' WHERE old_url='{}'".format(new_url, url))
         else:
-            cursor.execute("INSERT INTO main_app_redirects (old_url, new_url) VALUES ('{}','{}')".format(url, new_url))
+            execute("INSERT INTO main_app_redirects (old_url, new_url) VALUES ('{}','{}')".format(url, new_url))
         con.commit()
 
 
 def get_redirects(recheck_redirects=True):
     # run at start, reads database and makes sure that all are still valid redirects
-    cursor.execute("SELECT * FROM main_app_redirects")
+    execute("SELECT * FROM main_app_redirects")
     rows = cursor.fetchall()
     for i in range(0, len(rows)):
         redirects[rows[i][2]] = rows[i][1]
@@ -88,7 +89,7 @@ def get_redirects(recheck_redirects=True):
         redirects_copy = dict(redirects)
         for key, value in redirects_copy.items():
             try:
-                code = requests.get(key, headers=headers)
+                code = requests.get(key, stream = True, headers=headers)
                 new_url = code.url
                 if not (code.status_code == 404 and key in value):
                     if new_url.endswith("/"):
@@ -96,34 +97,38 @@ def get_redirects(recheck_redirects=True):
                     if not new_url == value:
                         if new_url == key:
                             del redirects[key]
-                            cursor.execute("DELETE FROM main_app_redirects WHERE old_url = '{}'".format(key))
+                            execute("DELETE FROM main_app_redirects WHERE old_url = '{}'".format(key))
                             con.commit()
                         else:
                             add_redirect(key, new_url)
                     elif key == value:
                         del redirects[key]
-                        cursor.execute("DELETE FROM main_app_redirects WHERE old_url = '{}'".format(key))
+                        execute("DELETE FROM main_app_redirects WHERE old_url = '{}'".format(key))
                         con.commit()
 
             except requests.ConnectionError as e:
-                print("link {} dropped this error, {}".format(key, e))
+                # print("\nlink {} dropped this error, {}".format(key, e))
+                pass
             except requests.exceptions.Timeout as e:
-                print("link {} timed out".format(key))
+                # print("\nlink {} timed out".format(key))
+                pass
             except requests.exceptions.InvalidSchema as e:
-                print("wait this broke {}".format(key))
+                # print("\nwait this broke {}".format(key))
+                pass
 
 
 def check_old(codes=[404]):
     # checks all old links in database, to see if any have been moved
     set_looking_for(codes)
-    print("Rechecking links in database \n\n\n\n")
-    urls = get_all()
+    # print("\nRechecking links in database \n\n\n\n")
+    urls = get_all
     for group in urls:
         status_change(group[0], group[1])
 
 
 def set_looking_for(input):
     # sets what error codes will be printed
+    pass
     for each in input:
         looking_for.add(each)
 
@@ -135,8 +140,8 @@ def get_local_links(html, url):
     try:
         parser.feed(html)
     except TypeError as e:
-        print("Error in parsing url {}, {}".format(url, e))
-
+        # print("\nError in parsing url {}, {}".format(url, e))
+        pass
     for link in parser.hrefs:
         parsed = urlparse(link, allow_fragments=True)
         if link.startswith('/') and not link.startswith('//'):
@@ -176,8 +181,8 @@ def set_disallowed_domains(accepted_domain):
 def start_crawl(start_urls, codes=[404]):
     # starts the crawler, run at beginning to re-crawl the entire website
     set_looking_for(codes)
-    cursor.execute("DELETE FROM main_app_statuses")
-    print("\n\n\n\nCrawling website, starting at {}".format(start_urls[0]))
+    execute("DELETE FROM main_app_statuses")
+    # print("\n\n\n\n\nCrawling website, starting at {}".format(start_urls[0]))
     for each in start_urls:
         crawl_site(each, "")
     rebuild_db()
@@ -197,23 +202,26 @@ def crawl_only_this_page(url, codes=[404]):
             if link not in broke_links and link not in used_links:
                 used_links.append(link)
                 try:
-                    code = requests.get(link, timeout=3, headers=headers)
+                    code = requests.get(link, stream = True, timeout=3, headers=headers)
                     if not code.url == link:
                         add_redirect(link, code.url)
                     if code.status_code in codes:
                         if link in local_links_with_params:
                             link = local_links_with_params[link]
-                            code = requests.get(link, headers=headers)
+                            code = requests.get(link, stream = True, headers=headers)
                         if code.status_code in codes:
                             broke_links.append(link)
                 except requests.ConnectionError as e:
-                    print("link {} : {}".format(url, e))
+                    # print("\nlink {} : {}".format(url, e))
+                    pass
                 except requests.exceptions.Timeout as e:
-                    print("link {}  timed out".format(url))
+                    # print("\nlink {}  timed out".format(url))
+                    pass
                 except requests.exceptions.InvalidSchema as e:
                     pass
                 except requests.exceptions.MissingSchema as e:
-                    print(link)
+                    # print(link)
+                    pass
     return broke_links
 
 
@@ -240,6 +248,8 @@ def crawl_site(url, old_url):
                 else:
                     check_status(url, old_url)
         else:
+            if url in local_links_with_params:
+                del local_links_with_params[url]
             if old_url not in visited_links[url]:
                 visited_links[url].append(old_url)
 
@@ -258,7 +268,10 @@ def parse_xml(html, url):
 def get_content(url, old_url):
     # gets the content of an html file, checks for stuff
     try:
-        code = requests.get(url, headers=headers)
+        if ".jpg" not in url and ".pdf" not in url and "downloads.malwarebytes.com" not in url:
+            code = requests.get(url, stream = True, headers=headers)
+        else:
+            code = requests.head(url, headers=headers)
         if code.is_redirect:
             add_redirect(url, code.url)
         if isinstance(code.status_code, int):
@@ -267,9 +280,10 @@ def get_content(url, old_url):
             previous_url = url
             if url in local_links_with_params:
                 url = local_links_with_params[url]
-                code = requests.get(url, headers=headers)
+                code = requests.get(url, stream = True, headers=headers)
+                del local_links_with_params[previous_url]
             if code.status_code in looking_for:
-                print("this url {} from {} is broken with code {}".format(url, old_url, code.status_code))
+                print("\nthis url {} from {} is broken with code {}".format(url, old_url, code.status_code))
             else:
                 add_redirect(previous_url, url)
                 update_urls_code(url, code.status_code)
@@ -278,16 +292,21 @@ def get_content(url, old_url):
             if not code.url == url:
                 add_redirect(url, code.url)
             return code.text
+        else:
+            if url in local_links_with_params:
+                del local_links_with_params[url]
     except requests.ConnectionError as e:
-        print("link {} : {}".format(url, e))
+        # print("\nlink {} : {}".format(url, e))
+        pass
     except requests.exceptions.Timeout as e:
-        print("link {}  timed out".format(url))
+        # print("\nlink {}  timed out".format(url))
+        pass
 
 
 def check_status(url, old_url):
     # checks status without seatching behond that
     try:
-        code = requests.get(url, timeout=3, headers=headers)
+        code = requests.get(url, stream = True, timeout=3, headers=headers)
         if isinstance(code.status_code, int):
             update_urls_code(url, code.status_code)
         if old_url not in visited_links[url]:
@@ -296,49 +315,60 @@ def check_status(url, old_url):
             previous_url = url
             if url in local_links_with_params:
                 url = local_links_with_params[url]
-            code = requests.get(url, headers=headers)
+                code = requests.get(url, stream = True, headers=headers)
+                del local_links_with_params[previous_url]
             if code.status_code in looking_for:
-                print("this url {} from {} is broken with code {}".format(url, old_url, code.status_code))
+                # print("\nthis url {} from {} is broken with code {}".format(url, old_url, code.status_code))
+                pass
             else:
                 add_redirect(previous_url, url)
                 update_urls_code(url, code.status_code)
+        else:
+            if url in local_links_with_params:
+                del local_links_with_params[url]
         return code.status_code
     except requests.ConnectionError as e:
-        print("link {} : {}".format(url,  e))
+        # print("\nlink {} : {}".format(url,  e))
+        pass
     except requests.exceptions.Timeout as e:
-        print("link {}  timed out".format(url))
+        # print("\nlink {}  timed out".format(url))
+        pass
     except requests.exceptions.InvalidSchema as e:
         del visited_links[url]
     except UnicodeError as e:
-        print("unicode screwed up on link {} from {}".format(url, old_url))
+        # print("\nunicode screwed up on link {} from {}".format(url, old_url))
+        pass
 
 
 def status_change(url, old_urls):
     # checks for a change in the status code without adding it to the visited_links, is for rechecking everything fast
     already_in_database[url] = json.loads(old_urls)
     try:
-        code = requests.get(url, timeout=3, headers=headers)
+        code = requests.get(url, stream = True, timeout=3, headers=headers)
         if isinstance(code.status_code, int):
             update_urls_code(url, code.status_code)
         if code.status_code in looking_for:
-            print("this link {} is returning {}".format(url, code.status_code))
+            print("\nthis link {} is returning {}".format(url, code.status_code))
         else:
             update_urls_code(url, code.status_code)
         return code.status_code
     except requests.ConnectionError as e:
-        print("link {} dropped this error, {}".format(url, e))
+        # print("\nlink {} dropped this error, {}".format(url, e))
+        pass
     except requests.exceptions.Timeout as e:
-        print("link {} timed out".format(url))
+        # print("\nlink {} timed out".format(url))
+        pass
     except requests.exceptions.InvalidSchema as e:
-        print("wait this broke {}".format(url))
+        # print("\nwait this broke {}".format(url))
+        pass
 
 
 def update_urls_code(url, code):
     # adds to the statuses database the new status of a url
-    if cursor.execute("SELECT EXISTS(SELECT 1 FROM main_app_statuses WHERE url='{}' LIMIT 1)".format(url)).fetchone()[0] == 1:
-        cursor.execute("UPDATE main_app_statuses SET code={} WHERE url='{}'".format(code,url))
+    if execute("SELECT EXISTS(SELECT 1 FROM main_app_statuses WHERE url='{}' LIMIT 1)".format(url)).fetchone()[0] == 1:
+        execute("UPDATE main_app_statuses SET code={} WHERE url='{}'".format(code,url))
     else:
-        cursor.execute("INSERT INTO main_app_statuses (url, code) VALUES ('{}','{}')".format(url,code))
+        execute("INSERT INTO main_app_statuses (url, code) VALUES ('{}','{}')".format(url,code))
     con.commit()
 
 
@@ -348,7 +378,7 @@ def find_code(requested_codes):
     for num in requested_codes:
         sql_query += "code = {} OR ".format(num)
     sql_query = sql_query[:len(sql_query)-4]
-    cursor.execute(sql_query)
+    execute(sql_query)
     rows = cursor.fetchall()
     returned_urls = set()
     for i in range(0, len(rows)):
@@ -361,7 +391,7 @@ def find_code_of_url(url):
     if url.endswith("/"):
         url = url[:len(url) - 1]
     sql_query = "SELECT * FROM main_app_statuses WHERE url = '{}'".format(url)
-    cursor.execute(sql_query)
+    execute(sql_query)
     rows = cursor.fetchall()
     if rows == []:
         return None
@@ -373,7 +403,7 @@ def find_link(url):
     # returns all pages linking to a certain link
     if url.endswith("/"):
         url = url[:len(url) - 1]
-    cursor.execute("SELECT * FROM main_app_sites WHERE url = '{}'".format(url))
+    execute("SELECT * FROM main_app_sites WHERE url = '{}'".format(url))
     temp = cursor.fetchall()
     if not temp:
         return "No Matches"
@@ -382,7 +412,15 @@ def find_link(url):
 
 
 def search(url):
-    cursor.execute("SELECT * FROM main_app_statuses")
+    execute("SELECT * FROM main_app_statuses")
     temp = cursor.fetchall()
     urls = [i[1] for i in temp]
     return [i[0] for i in process.extract(url, urls, limit=10)]
+
+
+def execute(the_input):
+    try:
+        return cursor.execute(the_input)
+    except sqlite3.ProgrammingError as e:
+        boot_db()
+        return cursor.execute(the_input)

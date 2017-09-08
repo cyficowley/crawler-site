@@ -1,0 +1,1 @@
+{"allowed_urls": ["www.malwarebytes.com"], "disallowed_urls": ["downloads.malwarebytes.com"], "start_page": ["https://www.malwarebytes.com/sitemap.xml"], "recheck_redirects": "false", "weekly_occurance": "thricely", "time_selection": "6", "scanning": false, "day_of_week": "6"}

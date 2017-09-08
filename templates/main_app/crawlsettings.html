@@ -104,14 +104,29 @@
                     </label>
                     <span>&nbsp;&nbsp;</span>
                     <label class="form-check-label unbold">
-                        <input type="radio" class="form-check-input" name="weekly_occurance" value="thricely" {% if weekly_occurance == "thricely" %} checked {% endif %}>
-                        Every 3 days
+                        <input type="radio" class="form-check-input" name="weekly_occurance" value="thricely" id="thricely_button" {% if weekly_occurance == "thricely" %} checked {% endif %}>
+                        3 Times Weekly
                     </label>
                     <span>&nbsp;&nbsp;</span>
                     <label class="form-check-label unbold">
-                        <input type="radio" class="form-check-input" name="weekly_occurance" value="weekly" {% if weekly_occurance == "weekly" %} checked {% endif %}>
+                        <input type="radio" class="form-check-input" name="weekly_occurance" value="weekly" id="weekly_button"{% if weekly_occurance == "weekly" %} checked {% endif %}>
                         Weekly
                     </label>
+                    <div id="only_if_weekly" class="hidden">
+                        <label for="day_of_week" class="unbold">Weekly On:</label>
+                        <select class="form-control" id="day_of_week" name="day_of_week">
+                            <option {% if day_of_week == "0" %} selected {% endif %} value="0">Sunday</option>
+                            <option {% if day_of_week == "1" %} selected {% endif %} value="1">Monday</option>
+                            <option {% if day_of_week == "2" %} selected {% endif %} value="2">Tuesday</option>
+                            <option {% if day_of_week == "3" %} selected {% endif %} value="3">Wednesday</option>
+                            <option {% if day_of_week == "4" %} selected {% endif %} value="4">Thursday</option>
+                            <option {% if day_of_week == "5" %} selected {% endif %} value="5">Friday</option>
+                            <option {% if day_of_week == "6" %} selected {% endif %} value="6">Saturday</option>
+                        </select>
+                    </div>
+                    <div id="only_if_tricely" class="hidden">
+                        <p>Scans on Monday, Wednesday and Friday</p>
+                    </div>
                 </div>
             </fieldset>
             {% csrf_token %}
@@ -129,6 +144,28 @@
 
 <script>
     $(".links").children().eq(1).addClass("active");
+    if ($('#weekly_button').is(':checked')) {
+        $("#only_if_weekly").removeClass("hidden");
+        $("#only_if_tricely").addClass("hidden");
+    }else if($('#thricely_button').is(':checked')){
+        $("#only_if_tricely").removeClass("hidden");
+        $("#only_if_weekly").addClass("hidden");
+    } else{
+        $("#only_if_weekly").addClass("hidden");
+        $("#only_if_tricely").addClass("hidden");
+    }
+    $('#weekly_occurance').click(function () {
+        if ($('#weekly_button').is(':checked')) {
+            $("#only_if_weekly").removeClass("hidden");
+            $("#only_if_tricely").addClass("hidden");
+        }else if($('#thricely_button').is(':checked')){
+            $("#only_if_tricely").removeClass("hidden");
+            $("#only_if_weekly").addClass("hidden");
+        } else{
+            $("#only_if_weekly").addClass("hidden");
+            $("#only_if_tricely").addClass("hidden");
+        }
+    });
 </script>
 </body>
 </html>

@@ -45,6 +45,8 @@ How to set up: (locally is exactly the same just with any version of linux)
 2. Open directory
 3. Install required python packages
    1. pip3 install -r requirements.txt
+1. Edit /main_app/views.py
+   1. Change line 134 to say the user name that you logged in with
 1. Open a screen window
    1. Screen
 1. Start server

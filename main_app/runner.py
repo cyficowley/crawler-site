@@ -18,6 +18,14 @@ def run_real():
     if f is not None and not f == "":
         settings_dict = json.loads(f)
 
+    settings_dict = get_settings()
+    settings_dict["scanning"] = True
+    f = open('static/settings.txt', 'w')
+    io = StringIO()
+    json.dump(settings_dict, io)
+    f.write(str(io.getvalue()))
+    f.close()
+
     start_time = time.time()
     main.set_accepted_domains(settings_dict["allowed_urls"])
     main.set_disallowed_domains(settings_dict["disallowed_urls"])

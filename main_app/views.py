@@ -131,11 +131,8 @@ def update_schedule(request):
     f.close()
     import crontab
     import os
-    tab = crontab.CronTab(user=getpass.getuser())
-    for job in tab:
-        tab.remove(job)
-        tab.write()
-    tab = crontab.CronTab(user=getpass.getuser())
+    tab = crontab.CronTab("ccowley")
+    tab.remove_all()
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     runner_dir = os.path.join(BASE_DIR, "main_app/runner.py")
     cmd = "cd {} && /usr/local/bin/python3 {} {}".format(BASE_DIR, runner_dir, BASE_DIR)
@@ -147,7 +144,6 @@ def update_schedule(request):
     if settings_dict['weekly_occurance'] == 'weekly':
         cron_job.dow.on(settings_dict["day_of_week"])
     tab.write()
-    logger.info(tab.render())
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 

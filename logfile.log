@@ -197,3 +197,95 @@ Not Found: /favicon.ico
 "GET /static/admin/fonts/Roboto-Light-webfont.woff HTTP/1.1" 200 81348
 Not Found: /favicon.ico
 "GET /favicon.ico HTTP/1.1" 404 3192
+"GET / HTTP/1.1" 200 8910
+"GET /crawl-settings/ HTTP/1.1" 200 10326
+"POST /update-options/ HTTP/1.1" 302 0
+"GET /crawl-settings/ HTTP/1.1" 200 10420
+"POST /start-crawl/ HTTP/1.1" 302 0
+"GET /crawl-settings/ HTTP/1.1" 200 10434
+"GET / HTTP/1.1" 200 6699
+"GET /ajax/update-data/?length=0&codes=404 HTTP/1.1" 200 560
+"GET /ajax/update-data/?length=7&codes=404 HTTP/1.1" 200 560
+"GET /ajax/update-data/?length=7&codes=404 HTTP/1.1" 200 31
+"GET /ajax/update-data/?length=0&codes=404 HTTP/1.1" 200 31
+"GET /ajax/update-data/?length=0&codes=404 HTTP/1.1" 200 31
+"GET /ajax/update-data/?length=0&codes=404 HTTP/1.1" 200 31
+"GET /ajax/update-data/?length=0&codes=404 HTTP/1.1" 200 233
+"GET /ajax/update-data/?length=3&codes=404 HTTP/1.1" 200 233
+"GET /ajax/update-data/?length=3&codes=404 HTTP/1.1" 200 233
+"GET /crawl-settings/ HTTP/1.1" 200 10434
+"GET / HTTP/1.1" 200 6699
+"GET /ajax/update-data/?length=0&codes=404 HTTP/1.1" 200 233
+"GET /ajax/update-data/?length=3&codes=404 HTTP/1.1" 200 233
+"GET /ajax/update-data/?length=3&codes=404 HTTP/1.1" 200 233
+"GET /ajax/update-data/?length=3&codes=404 HTTP/1.1" 200 233
+"GET /ajax/update-data/?length=3&codes=404 HTTP/1.1" 200 233
+"GET /ajax/update-data/?length=3&codes=404 HTTP/1.1" 200 233
+"GET /ajax/update-data/?length=3&codes=404 HTTP/1.1" 200 233
+"GET /ajax/update-data/?length=3&codes=404 HTTP/1.1" 200 233
+"GET /ajax/update-data/?length=3&codes=404 HTTP/1.1" 200 233
+"GET /ajax/update-data/?length=3&codes=404 HTTP/1.1" 200 318
+"GET /ajax/update-data/?length=4&codes=404 HTTP/1.1" 200 318
+"GET /ajax/update-data/?length=4&codes=404 HTTP/1.1" 200 318
+"GET /ajax/update-data/?length=4&codes=404 HTTP/1.1" 200 318
+"GET /ajax/update-data/?length=4&codes=404 HTTP/1.1" 200 318
+"GET /ajax/update-data/?length=4&codes=404 HTTP/1.1" 200 492
+"GET /ajax/update-data/?length=6&codes=404 HTTP/1.1" 200 492
+"GET /ajax/update-data/?length=6&codes=404 HTTP/1.1" 200 492
+"GET /ajax/update-data/?length=6&codes=404 HTTP/1.1" 200 492
+"GET /ajax/update-data/?length=6&codes=404 HTTP/1.1" 200 492
+"GET /ajax/update-data/?length=6&codes=404 HTTP/1.1" 200 492
+"GET /ajax/update-data/?length=6&codes=404 HTTP/1.1" 200 593
+"GET /ajax/update-data/?length=7&codes=404 HTTP/1.1" 200 645
+"GET /ajax/update-data/?length=8&codes=404 HTTP/1.1" 200 645
+"GET /ajax/update-data/?length=8&codes=404 HTTP/1.1" 200 875
+"GET /ajax/update-data/?length=11&codes=404 HTTP/1.1" 200 875
+"GET /ajax/update-data/?length=11&codes=404 HTTP/1.1" 200 876
+"GET / HTTP/1.1" 200 10558
+"GET / HTTP/1.1" 200 10558
+"GET /static/css/style_sheet.css HTTP/1.1" 304 0
+"GET /static/css/bootstrap.css HTTP/1.1" 304 0
+"GET /crawl-settings/ HTTP/1.1" 200 10420
+
+0 15 * * * cd /Users/ccowley/Dropbox/work_stuff/django_crawler_new && /usr/local/bin/python3 /Users/ccowley/Dropbox/work_stuff/django_crawler_new/main_app/runner.py /Users/ccowley/Dropbox/work_stuff/django_crawler_new # this is the main command
+
+"POST /update-schedule/ HTTP/1.1" 302 0
+"GET /crawl-settings/ HTTP/1.1" 200 10420
+"GET / HTTP/1.1" 200 10558
+"GET /crawl-settings/ HTTP/1.1" 200 10420
+"GET / HTTP/1.1" 200 10558
+"GET /crawl-settings/ HTTP/1.1" 200 10420
+"GET / HTTP/1.1" 200 10558
+"GET /crawl-settings/ HTTP/1.1" 200 10420
+
+0 3 * * 1,3,5 cd /Users/ccowley/Dropbox/work_stuff/django_crawler_new && /usr/local/bin/python3 /Users/ccowley/Dropbox/work_stuff/django_crawler_new/main_app/runner.py /Users/ccowley/Dropbox/work_stuff/django_crawler_new # this is the main command
+
+"POST /update-schedule/ HTTP/1.1" 302 0
+"GET /crawl-settings/ HTTP/1.1" 200 10420
+
+@daily cd /Users/ccowley/Dropbox/work_stuff/django_crawler_new && /usr/local/bin/python3 /Users/ccowley/Dropbox/work_stuff/django_crawler_new/main_app/runner.py /Users/ccowley/Dropbox/work_stuff/django_crawler_new # this is the main command
+
+"POST /update-schedule/ HTTP/1.1" 302 0
+"GET /crawl-settings/ HTTP/1.1" 200 10420
+"GET / HTTP/1.1" 200 10558
+"GET /crawl-settings/ HTTP/1.1" 200 10420
+"GET / HTTP/1.1" 200 10558
+"GET /crawl-settings/ HTTP/1.1" 200 10420
+"POST /start-crawl/ HTTP/1.1" 302 0
+"GET /crawl-settings/ HTTP/1.1" 200 10434
+"GET / HTTP/1.1" 200 6699
+"GET /ajax/update-data/?length=0&codes=404 HTTP/1.1" 200 875
+"GET /crawl-settings/ HTTP/1.1" 200 10434
+"GET / HTTP/1.1" 200 6699
+"GET /ajax/update-data/?length=0&codes=404 HTTP/1.1" 200 31
+"GET /crawl-settings/ HTTP/1.1" 200 10434
+
+0 12 * * * cd /Users/ccowley/Dropbox/work_stuff/django_crawler_new && /usr/local/bin/python3 /Users/ccowley/Dropbox/work_stuff/django_crawler_new/main_app/runner.py /Users/ccowley/Dropbox/work_stuff/django_crawler_new # this is the main command
+
+"POST /update-schedule/ HTTP/1.1" 302 0
+"GET /crawl-settings/ HTTP/1.1" 200 10434
+"GET / HTTP/1.1" 200 6699
+"GET /ajax/update-data/?length=0&codes=404 HTTP/1.1" 200 31
+"GET /ajax/update-data/?length=0&codes=404 HTTP/1.1" 200 31
+"GET /ajax/update-data/?length=0&codes=404 HTTP/1.1" 200 31
+"GET /ajax/update-data/?length=0&codes=404 HTTP/1.1" 200 31

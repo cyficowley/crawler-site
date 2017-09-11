@@ -1,1 +1,1 @@
-{"time_to_complete": "0 hours, 05 minutes and 56 seconds", "full_time": "09/08/17 at 11:53 AM"}
+{"time_to_complete": "0 hours, 11 minutes and 29 seconds", "full_time": "09/11/17 at 09:53 AM"}

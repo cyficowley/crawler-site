@@ -148,7 +148,13 @@ def update_schedule(request):
 
 
 def start_crawl(request):
-
+    settings_dict = get_settings()
+    settings_dict["scanning"] = True
+    f = open('static/settings.txt', 'w')
+    io = StringIO()
+    json.dump(settings_dict, io)
+    f.write(str(io.getvalue()))
+    f.close()
     runner.run()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 

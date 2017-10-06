@@ -6,7 +6,6 @@ import sqlite3
 import json
 from io import StringIO
 from fuzzywuzzy import process
-from pympler import asizeof
 
 
 class HrefParser(HTMLParser):
@@ -268,7 +267,7 @@ def parse_xml(html, url):
 def get_content(url, old_url):
     # gets the content of an html file, checks for stuff
     try:
-        if ".jpg" not in url and ".pdf" not in url and "downloads.malwarebytes.com" not in url:
+        if ".jpg" not in url and ".pdf" not in url and "downloads" not in url:
             code = requests.get(url, stream = True, headers=headers)
         else:
             code = requests.head(url, headers=headers)
@@ -288,7 +287,7 @@ def get_content(url, old_url):
                 add_redirect(previous_url, url)
                 update_urls_code(url, code.status_code)
                 return code.text
-        elif ".jpg" not in url and ".pdf" not in url and "downloads.malwarebytes.com" not in url:
+        elif ".jpg" not in url and ".pdf" not in url and "downloads" not in url:
             if not code.url == url:
                 add_redirect(url, code.url)
             return code.text

@@ -28,5 +28,4 @@ sqlite3
 tornado
 webencodings
 wrapt
-xattr
 zope.interface

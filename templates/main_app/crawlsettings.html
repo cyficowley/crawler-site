@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Crawler for Malwarebytes.com">
+    <meta name="description" content="Web Crawler">
     <meta name="author" content="Cyrus Cowley">
     <title>Malwarebytes Crawler</title>
     <link rel="stylesheet" href="/static/css/style_sheet.css">
@@ -50,15 +50,15 @@
         <form action="/update-options/" method="post">
             <div class="form-group">
                 <label for="allowed_urls">Allowed URLs (will be scanned for new links)</label>
-                <input class="form-control" id="allowed_urls" name="allowed_urls" placeholder="www.malwarebytes.com, support.malwarebytes.com" value="{{ allowed_urls|join:", "}}">
+                <input class="form-control" id="allowed_urls" name="allowed_urls" placeholder="www.dropbox.com" value="{{ allowed_urls|join:", "}}">
             </div>
             <div class="form-group">
                 <label for="disallowed_urls">Disallowed URLs (won't be accessed in any way)</label>
-                <input class="form-control" id="disallowed_urls" name="disallowed_urls" value="{{ disallowed_urls|join:", "}}">
+                <input class="form-control" id="disallowed_urls" name="disallowed_urls" placeholder="download" value="{{ disallowed_urls|join:", "}}">
             </div>
             <div class="form-group">
                 <label for="start_page">Starting From</label>
-                <input class="form-control" id="start_page" name="start_page" placeholder="https://www.malwarebytes.com/sitemap.xml" value="{{ start_page|join:", " }}">
+                <input class="form-control" id="start_page" name="start_page" placeholder="https://www.dropbox.com" value="{{ start_page|join:", " }}">
             </div>
             <fieldset class="form-group">
                 <label for="trymeout">Recheck Redirects:</label>

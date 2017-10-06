@@ -179,23 +179,163 @@ FileNotFoundError: [WinError 2] The system cannot find the file specified
 "GET /ajax/update-data/?length=0&codes=404 HTTP/1.1" 200 85
 "GET /crawl-settings/ HTTP/1.1" 200 10287
 "GET / HTTP/1.1" 200 6673
+"GET /static/css/style_sheet.css HTTP/1.1" 200 694
+"GET /static/css/bootstrap.css HTTP/1.1" 200 146010
+"GET /static/javascript/bootstrap.js HTTP/1.1" 200 69707
 "GET /ajax/update-data/?length=0&codes=404 HTTP/1.1" 200 85
+"GET /static/images/logo.png HTTP/1.1" 200 7030
+"GET /crawl-settings HTTP/1.1" 301 0
 "GET /crawl-settings/ HTTP/1.1" 200 10287
-Internal Server Error: /start-crawl/
+Internal Server Error: /update-schedule/
 Traceback (most recent call last):
-  File "C:\Users\cyrus\AppData\Local\Programs\Python\Python36-32\lib\site-packages\django\core\handlers\exception.py", line 41, in inner
+  File "/usr/local/lib/python3.6/site-packages/django/core/handlers/exception.py", line 41, in inner
     response = get_response(request)
-  File "C:\Users\cyrus\AppData\Local\Programs\Python\Python36-32\lib\site-packages\django\core\handlers\base.py", line 187, in _get_response
+  File "/usr/local/lib/python3.6/site-packages/django/core/handlers/base.py", line 187, in _get_response
     response = self.process_exception_by_middleware(e, request)
-  File "C:\Users\cyrus\AppData\Local\Programs\Python\Python36-32\lib\site-packages\django\core\handlers\base.py", line 185, in _get_response
+  File "/usr/local/lib/python3.6/site-packages/django/core/handlers/base.py", line 185, in _get_response
     response = wrapped_callback(request, *callback_args, **callback_kwargs)
-  File "C:\Users\cyrus\Dropbox\work_stuff\django_crawler_new\main_app\views.py", line 158, in start_crawl
-    runner.run()
-  File "C:\Users\cyrus\Dropbox\work_stuff\django_crawler_new\main_app\runner.py", line 11, in run
-    subprocess.Popen(commands)
-  File "C:\Users\cyrus\AppData\Local\Programs\Python\Python36-32\lib\subprocess.py", line 707, in __init__
-    restore_signals, start_new_session)
-  File "C:\Users\cyrus\AppData\Local\Programs\Python\Python36-32\lib\subprocess.py", line 992, in _execute_child
-    startupinfo)
-FileNotFoundError: [WinError 2] The system cannot find the file specified
-"POST /start-crawl/ HTTP/1.1" 500 86808
+  File "/Users/cyrus/Dropbox/work_stuff/django_crawler_new/main_app/views.py", line 134, in update_schedule
+    tab = crontab.CronTab("ccowley")
+  File "/usr/local/lib/python3.6/site-packages/crontab.py", line 217, in __init__
+    self.read(tabfile)
+  File "/usr/local/lib/python3.6/site-packages/crontab.py", line 268, in read
+    raise IOError("Read crontab %s: %s" % (self.user, err))
+OSError: Read crontab ccowley: b'crontab: must be privileged to use -u\n'
+"POST /update-schedule/ HTTP/1.1" 500 73609
+Not Found: /favicon.ico
+"GET /favicon.ico HTTP/1.1" 404 3192
+"POST /start-crawl/ HTTP/1.1" 302 0
+"GET /crawl-settings/ HTTP/1.1" 200 10287
+"GET / HTTP/1.1" 200 6673
+"GET /ajax/update-data/?length=0&codes=404 HTTP/1.1" 200 85
+"GET /ajax/update-data/?length=1&codes=404 HTTP/1.1" 200 85
+"GET /ajax/update-data/?length=1&codes=404 HTTP/1.1" 200 85
+"GET /crawl-settings/ HTTP/1.1" 200 10287
+"GET / HTTP/1.1" 200 6673
+"GET /ajax/update-data/?length=0&codes=404 HTTP/1.1" 200 31
+"GET /ajax/update-data/?length=0&codes=404 HTTP/1.1" 200 31
+"GET /ajax/update-data/?length=0&codes=404 HTTP/1.1" 200 31
+"GET /ajax/update-data/?length=0&codes=404 HTTP/1.1" 200 31
+"GET /ajax/update-data/?length=0&codes=404 HTTP/1.1" 200 31
+"GET /ajax/update-data/?length=0&codes=404 HTTP/1.1" 200 31
+"GET /ajax/update-data/?length=0&codes=404 HTTP/1.1" 200 31
+"GET /ajax/update-data/?length=0&codes=404 HTTP/1.1" 200 31
+"GET /ajax/update-data/?length=0&codes=404 HTTP/1.1" 200 31
+"GET /ajax/update-data/?length=0&codes=404 HTTP/1.1" 200 31
+"GET /ajax/update-data/?length=0&codes=404 HTTP/1.1" 200 319
+"GET /ajax/update-data/?length=5&codes=404 HTTP/1.1" 200 529
+"GET /ajax/update-data/?length=8&codes=404 HTTP/1.1" 200 583
+"GET /ajax/update-data/?length=9&codes=404 HTTP/1.1" 200 583
+"GET /ajax/update-data/?length=9&codes=404 HTTP/1.1" 200 687
+"GET /link-details?input=https://www.avast.com/fa-ir/business-antivirus-pro-plus HTTP/1.1" 301 0
+"GET /link-details/?input=https://www.avast.com/fa-ir/business-antivirus-pro-plus HTTP/1.1" 200 8487
+"GET /link-details?input=https://www.avast.com/hi-in/call-blocker HTTP/1.1" 301 0
+"GET /link-details/?input=https://www.avast.com/hi-in/call-blocker HTTP/1.1" 200 8457
+"GET / HTTP/1.1" 200 6673
+"GET /ajax/update-data/?length=0&codes=404 HTTP/1.1" 200 776
+"GET /static/images/logo.png HTTP/1.1" 200 7030
+"GET /link-details?input=https://www.avast.com/zh-cn/call-blocker HTTP/1.1" 301 0
+"GET /link-details/?input=https://www.avast.com/zh-cn/call-blocker HTTP/1.1" 200 8457
+"GET /link-details?input=https://www.avast.com/es-cu/managed-workplace-backup-and-disaster-recovery HTTP/1.1" 301 0
+"GET /link-details/?input=https://www.avast.com/es-cu/managed-workplace-backup-and-disaster-recovery HTTP/1.1" 200 8525
+"GET /ajax/update-data/?length=11&codes=404 HTTP/1.1" 200 959
+"GET /ajax/update-data/?length=14&codes=404 HTTP/1.1" 200 959
+"GET /ajax/update-data/?length=14&codes=404 HTTP/1.1" 200 1184
+"GET /ajax/update-data/?length=18&codes=404 HTTP/1.1" 200 1379
+"GET /ajax/update-data/?length=21&codes=404 HTTP/1.1" 200 1379
+"GET /ajax/update-data/?length=21&codes=404 HTTP/1.1" 200 1379
+"GET /ajax/update-data/?length=21&codes=404 HTTP/1.1" 200 1379
+"GET /ajax/update-data/?length=21&codes=404 HTTP/1.1" 200 1449
+"GET /ajax/update-data/?length=22&codes=404 HTTP/1.1" 200 1621
+"GET /ajax/update-data/?length=25&codes=404 HTTP/1.1" 200 1621
+"GET /ajax/update-data/?length=25&codes=404 HTTP/1.1" 200 1697
+"GET /ajax/update-data/?length=26&codes=404 HTTP/1.1" 200 1859
+"GET /ajax/update-data/?length=29&codes=404 HTTP/1.1" 200 1859
+"GET /ajax/update-data/?length=29&codes=404 HTTP/1.1" 200 1926
+"GET /ajax/update-data/?length=30&codes=404 HTTP/1.1" 200 1926
+"GET /ajax/update-data/?length=30&codes=404 HTTP/1.1" 200 1926
+"GET /ajax/update-data/?length=30&codes=404 HTTP/1.1" 200 1926
+"GET /ajax/update-data/?length=30&codes=404 HTTP/1.1" 200 1926
+"GET /ajax/update-data/?length=30&codes=404 HTTP/1.1" 200 1926
+"GET /ajax/update-data/?length=30&codes=404 HTTP/1.1" 200 1987
+"GET /ajax/update-data/?length=31&codes=404 HTTP/1.1" 200 1987
+"GET /ajax/update-data/?length=31&codes=404 HTTP/1.1" 200 1987
+"GET /ajax/update-data/?length=31&codes=404 HTTP/1.1" 200 1987
+"GET /ajax/update-data/?length=31&codes=404 HTTP/1.1" 200 1987
+"GET /ajax/update-data/?length=31&codes=404 HTTP/1.1" 200 1987
+"GET /ajax/update-data/?length=31&codes=404 HTTP/1.1" 200 1987
+"GET /ajax/update-data/?length=31&codes=404 HTTP/1.1" 200 1987
+"GET /ajax/update-data/?length=31&codes=404 HTTP/1.1" 200 1987
+"GET /ajax/update-data/?length=31&codes=404 HTTP/1.1" 200 1987
+"GET /ajax/update-data/?length=31&codes=404 HTTP/1.1" 200 1987
+"GET /ajax/update-data/?length=31&codes=404 HTTP/1.1" 200 1987
+"GET /ajax/update-data/?length=31&codes=404 HTTP/1.1" 200 1987
+"GET /ajax/update-data/?length=31&codes=404 HTTP/1.1" 200 1987
+"GET /ajax/update-data/?length=31&codes=404 HTTP/1.1" 200 1987
+"GET /ajax/update-data/?length=31&codes=404 HTTP/1.1" 200 1987
+"GET /ajax/update-data/?length=31&codes=404 HTTP/1.1" 200 1987
+"GET /ajax/update-data/?length=31&codes=404 HTTP/1.1" 200 1987
+"GET /ajax/update-data/?length=31&codes=404 HTTP/1.1" 200 1987
+"GET /ajax/update-data/?length=31&codes=404 HTTP/1.1" 200 1987
+"GET /ajax/update-data/?length=31&codes=404 HTTP/1.1" 200 1987
+"GET /ajax/update-data/?length=31&codes=404 HTTP/1.1" 200 1987
+"GET /ajax/update-data/?length=31&codes=404 HTTP/1.1" 200 1987
+"GET /ajax/update-data/?length=31&codes=404 HTTP/1.1" 200 1987
+"GET /ajax/update-data/?length=31&codes=404 HTTP/1.1" 200 1987
+"GET /ajax/update-data/?length=31&codes=404 HTTP/1.1" 200 1987
+"GET /ajax/update-data/?length=31&codes=404 HTTP/1.1" 200 1987
+"GET /ajax/update-data/?length=31&codes=404 HTTP/1.1" 200 1987
+"GET /ajax/update-data/?length=31&codes=404 HTTP/1.1" 200 1987
+"GET /ajax/update-data/?length=31&codes=404 HTTP/1.1" 200 1987
+"GET /ajax/update-data/?length=31&codes=404 HTTP/1.1" 200 1987
+"GET /ajax/update-data/?length=31&codes=404 HTTP/1.1" 200 1987
+"GET /ajax/update-data/?length=31&codes=404 HTTP/1.1" 200 1987
+"GET /ajax/update-data/?length=31&codes=404 HTTP/1.1" 200 1987
+"GET /ajax/update-data/?length=31&codes=404 HTTP/1.1" 200 1987
+"GET /ajax/update-data/?length=31&codes=404 HTTP/1.1" 200 1987
+"GET /ajax/update-data/?length=31&codes=404 HTTP/1.1" 200 1987
+"GET /ajax/update-data/?length=31&codes=404 HTTP/1.1" 200 1987
+"GET /ajax/update-data/?length=31&codes=404 HTTP/1.1" 200 1987
+"GET /ajax/update-data/?length=31&codes=404 HTTP/1.1" 200 1987
+"GET /ajax/update-data/?length=31&codes=404 HTTP/1.1" 200 1987
+"GET /ajax/update-data/?length=31&codes=404 HTTP/1.1" 200 1987
+"GET /ajax/update-data/?length=31&codes=404 HTTP/1.1" 200 1987
+"GET /ajax/update-data/?length=31&codes=404 HTTP/1.1" 200 1987
+"GET /ajax/update-data/?length=31&codes=404 HTTP/1.1" 200 1987
+"GET /ajax/update-data/?length=31&codes=404 HTTP/1.1" 200 1987
+"GET /ajax/update-data/?length=31&codes=404 HTTP/1.1" 200 1987
+"GET /ajax/update-data/?length=31&codes=404 HTTP/1.1" 200 1987
+"GET /ajax/update-data/?length=31&codes=404 HTTP/1.1" 200 1987
+"GET /ajax/update-data/?length=31&codes=404 HTTP/1.1" 200 1987
+"GET /ajax/update-data/?length=31&codes=404 HTTP/1.1" 200 1987
+"GET /ajax/update-data/?length=31&codes=404 HTTP/1.1" 200 1987
+"GET /ajax/update-data/?length=31&codes=404 HTTP/1.1" 200 1987
+"GET /ajax/update-data/?length=31&codes=404 HTTP/1.1" 200 1987
+"GET /ajax/update-data/?length=31&codes=404 HTTP/1.1" 200 1987
+"GET /crawl-settings/ HTTP/1.1" 200 10287
+"POST /update-options/ HTTP/1.1" 302 0
+"GET /crawl-settings/ HTTP/1.1" 200 10293
+"POST /start-crawl/ HTTP/1.1" 302 0
+"GET /crawl-settings/ HTTP/1.1" 200 10293
+"GET / HTTP/1.1" 200 6673
+"GET /ajax/update-data/?length=0&codes=404 HTTP/1.1" 200 1987
+"GET /ajax/update-data/?length=31&codes=404 HTTP/1.1" 200 1987
+"GET /ajax/update-data/?length=31&codes=404 HTTP/1.1" 200 1987
+"GET /ajax/update-data/?length=31&codes=404 HTTP/1.1" 200 31
+"GET /ajax/update-data/?length=0&codes=404 HTTP/1.1" 200 31
+"GET /ajax/update-data/?length=0&codes=404 HTTP/1.1" 200 31
+"GET / HTTP/1.1" 200 6673
+"GET /ajax/update-data/?length=0&codes=404 HTTP/1.1" 200 31
+"GET /ajax/update-data/?length=0&codes=404 HTTP/1.1" 200 31
+"GET /ajax/update-data/?length=0&codes=404 HTTP/1.1" 200 31
+"GET /ajax/update-data/?length=0&codes=404 HTTP/1.1" 200 31
+"GET /ajax/update-data/?length=0&codes=404 HTTP/1.1" 200 31
+"GET /ajax/update-data/?length=0&codes=404 HTTP/1.1" 200 31
+"GET /ajax/update-data/?length=0&codes=404 HTTP/1.1" 200 31
+"GET /ajax/update-data/?length=0&codes=404 HTTP/1.1" 200 31
+"GET /ajax/update-data/?length=0&codes=404 HTTP/1.1" 200 31
+"GET /ajax/update-data/?length=0&codes=404 HTTP/1.1" 200 31
+"GET /ajax/update-data/?length=0&codes=404 HTTP/1.1" 200 31
+"GET /crawl-settings/ HTTP/1.1" 200 10293
+"POST /update-options/ HTTP/1.1" 302 0
+"GET /crawl-settings/ HTTP/1.1" 200 10284

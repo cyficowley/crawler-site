@@ -1,4 +1,4 @@
-This is a web crawler written for Malwarebytes by Cyrus Cowley
+This is a web crawler I wrote over Summer for work
 
 It crawls the website and feeds all the information into a database for fast access and easy exploration of the links
 

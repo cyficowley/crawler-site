@@ -14,7 +14,7 @@ Features:
 
 
 How to set up: (locally is exactly the same just with any version of linux)
-1. get a raspberry pi (model 2 b)
+1. get a raspberry pi (model 2 b)  (Or any sort of linux server that can run django and has the same or above specs as this pi)
 2. Install raspbian https://www.raspberrypi.org/downloads/raspbian/
 3. Set yourself as superuser
    1. su -
